@@ -1,0 +1,569 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;color:#222;background:#fff;font-size:14px}
+a{text-decoration:none;color:inherit}
+
+.tb{background:#1c2e5e;padding:7px 32px;display:flex;justify-content:space-between;align-items:center}
+.tb span,.tb a{color:rgba(255,255,255,0.7);font-size:12px}
+.tb a:hover{color:#fff}
+.tb-r{display:flex;gap:18px}
+
+.nav{background:#fff;border-bottom:1px solid #e5e9f0;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:66px;position:sticky;top:0;z-index:999;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-sq{width:38px;height:38px;background:#1c2e5e;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px}
+.logo-name{font-size:20px;font-weight:700;color:#1c2e5e;letter-spacing:.5px}
+.logo-name em{color:#e07b00;font-style:normal}
+.nmenu{display:flex}
+.nmenu a{color:#333;font-size:13px;padding:0 14px;height:66px;display:flex;align-items:center;border-bottom:3px solid transparent;font-weight:500}
+.nmenu a:hover{color:#1c2e5e;border-bottom-color:#e07b00}
+.nav-r{display:flex;align-items:center;gap:10px}
+.nav-search{background:#f5f7fb;border:1px solid #dde3ec;border-radius:5px;padding:7px 14px;font-size:13px;color:#555;width:180px}
+.nav-btn{background:#e07b00;color:#fff;padding:9px 20px;border-radius:5px;font-size:13px;font-weight:700;border:none;cursor:pointer}
+
+/* HERO SLIDER */
+.slider{position:relative;height:480px;overflow:hidden;background:#0d1a35}
+.slides{display:flex;width:300%;height:100%;transition:transform .6s ease}
+.slide{flex:0 0 33.333%;height:100%;display:flex;align-items:center;position:relative}
+.s1{background:linear-gradient(to right,rgba(10,20,55,0.88) 45%,rgba(10,20,55,0.4) 100%),url('https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=1200&q=80') right center/cover no-repeat}
+.s2{background:linear-gradient(to right,rgba(10,20,55,0.88) 45%,rgba(10,20,55,0.4) 100%),url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&q=80') right center/cover no-repeat}
+.s3{background:linear-gradient(to right,rgba(10,20,55,0.88) 45%,rgba(10,20,55,0.4) 100%),url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=80') right center/cover no-repeat}
+.sc{padding:0 64px;max-width:580px}
+.sc-tag{display:inline-block;background:#e07b00;color:#fff;font-size:11px;font-weight:700;padding:4px 14px;border-radius:3px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px}
+.sc h1{font-size:40px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:12px}
+.sc h1 em{color:#e07b00;font-style:normal}
+.sc p{font-size:14.5px;color:rgba(255,255,255,0.72);line-height:1.75;margin-bottom:26px;max-width:440px}
+.sc-btns{display:flex;gap:12px}
+.btn-w{background:#fff;color:#1c2e5e;padding:12px 26px;border-radius:5px;font-size:13px;font-weight:700;border:none;cursor:pointer}
+.btn-o{background:#e07b00;color:#fff;padding:12px 26px;border-radius:5px;font-size:13px;font-weight:700;border:none;cursor:pointer}
+.s-prev,.s-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;width:42px;height:42px;border-radius:50%;font-size:20px;cursor:pointer;z-index:5;display:flex;align-items:center;justify-content:center}
+.s-prev{left:20px}
+.s-next{right:20px}
+.s-dots{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.35);border:none;cursor:pointer;padding:0;transition:all .2s}
+.dot.on{background:#e07b00;width:28px;border-radius:5px}
+
+/* STATS BAR */
+.stats-bar{background:#1c2e5e;padding:0 32px;display:flex}
+.stat-item{flex:1;padding:18px 0;text-align:center;border-right:1px solid rgba(255,255,255,0.1)}
+.stat-item:last-child{border-right:none}
+.stat-num{font-size:24px;font-weight:700;color:#e07b00}
+.stat-lbl{font-size:11.5px;color:rgba(255,255,255,0.6);margin-top:2px}
+
+/* STRIP */
+.strip{background:#f5f7fb;border-bottom:1px solid #e5e9f0;padding:0 32px;display:flex}
+.si{flex:1;display:flex;align-items:center;gap:12px;padding:16px 0;border-right:1px solid #e5e9f0}
+.si:last-child{border-right:none}
+.si:not(:first-child){padding-left:20px}
+.si-ico{width:36px;height:36px;background:#e07b00;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;flex-shrink:0}
+.si strong{display:block;font-size:13px;font-weight:700;color:#1c2e5e}
+.si span{font-size:11.5px;color:#888}
+
+/* SECTIONS */
+.sec{padding:52px 32px}
+.sec-alt{background:#f5f7fb}
+.sh{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px}
+.sh-l .eye{font-size:11px;font-weight:700;color:#e07b00;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.sh-l h2{font-size:22px;font-weight:700;color:#1c2e5e}
+.sh-l p{font-size:13px;color:#888;margin-top:4px}
+.sh-r a{font-size:13px;font-weight:700;color:#e07b00}
+
+/* CATEGORIES */
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.cat-card{background:#fff;border:1px solid #e5e9f0;border-radius:8px;padding:20px 16px;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.cat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:#e07b00;transform:scaleX(0);transition:.2s}
+.cat-card:hover{border-color:#1c2e5e;box-shadow:0 4px 16px rgba(28,46,94,.08)}
+.cat-card:hover::after{transform:scaleX(1)}
+.cat-ico{width:60px;height:60px;background:#eef1fa;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:24px}
+.cat-card h4{font-size:13px;font-weight:700;color:#1c2e5e;margin-bottom:3px}
+.cat-card p{font-size:11.5px;color:#aaa}
+
+/* PRODUCT GRID */
+.prod-head{background:#1c2e5e;padding:10px 20px;border-radius:6px 6px 0 0;display:flex;align-items:center;justify-content:space-between}
+.prod-head h3{color:#fff;font-size:14px;font-weight:700}
+.prod-head a{color:#e07b00;font-size:12.5px;font-weight:600}
+.prod-head p{color:rgba(255,255,255,0.55);font-size:12px}
+.prod-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:0;border:1px solid #e5e9f0;border-top:none;border-radius:0 0 6px 6px;overflow:hidden}
+.prod-card{background:#fff;border-right:1px solid #e5e9f0;text-align:center;cursor:pointer;transition:background .15s;padding-bottom:12px}
+.prod-card:last-child{border-right:none}
+.prod-card:hover{background:#f5f7fb}
+.prod-img{height:110px;background:#f8f9fc;border-bottom:1px solid #e5e9f0;display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:10px}
+.prod-name{font-size:12px;font-weight:600;color:#1c2e5e;padding:0 8px;line-height:1.4}
+.view-btn{display:inline-block;margin-top:8px;font-size:11px;color:#e07b00;font-weight:600;border:1px solid #e07b00;border-radius:3px;padding:3px 10px}
+
+/* ABOUT */
+.about-wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.about-img{position:relative}
+.about-photo{width:100%;height:340px;border-radius:8px;background:url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80') center/cover no-repeat}
+.about-badge{position:absolute;bottom:-20px;right:-20px;background:#e07b00;border-radius:7px;padding:18px 22px;text-align:center}
+.ab-num{font-size:32px;font-weight:700;color:#fff}
+.ab-lbl{font-size:11.5px;color:rgba(255,255,255,.8)}
+.about-content h2{font-size:22px;font-weight:700;color:#1c2e5e;margin-bottom:12px}
+.about-content > p{font-size:13.5px;color:#555;line-height:1.85;margin-bottom:18px}
+.checks{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.checks li{font-size:13px;color:#444;display:flex;align-items:flex-start;gap:9px}
+.chk{width:18px;height:18px;min-width:18px;background:#1c2e5e;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:700;margin-top:1px}
+
+/* INDUSTRIES */
+.ind-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ind-card{border-radius:8px;overflow:hidden;border:1px solid #e5e9f0}
+.ind-img{height:160px;display:flex;align-items:flex-end;padding:12px;background-size:cover;background-position:center}
+.ip1{background:linear-gradient(rgba(5,15,40,.25),rgba(5,15,40,.65)),url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&q=70') center/cover}
+.ip2{background:linear-gradient(rgba(5,15,40,.25),rgba(5,15,40,.65)),url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=70') center/cover}
+.ip3{background:linear-gradient(rgba(5,15,40,.25),rgba(5,15,40,.65)),url('https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?w=600&q=70') center/cover}
+.ind-tag{background:#e07b00;color:#fff;font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:3px}
+.ind-body{padding:16px 18px;background:#fff}
+.ind-body h3{font-size:15px;font-weight:700;color:#1c2e5e;margin-bottom:5px}
+.ind-body p{font-size:12.5px;color:#666;line-height:1.65;margin-bottom:10px}
+.ind-link{font-size:12.5px;color:#e07b00;font-weight:700}
+
+/* BRANDS */
+.brands-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0;border:1px solid #e5e9f0;border-radius:8px;overflow:hidden}
+.brand-box{flex:1;min-width:100px;padding:20px 16px;text-align:center;border-right:1px solid #e5e9f0;border-bottom:1px solid #e5e9f0;font-size:14px;font-weight:700;color:#bbb;letter-spacing:.5px;background:#fff}
+.brand-box:hover{background:#f5f7fb;color:#1c2e5e}
+
+/* GET QUOTE BAND */
+.quote-band{background:linear-gradient(135deg,#1c2e5e 0%,#0d1a35 100%);padding:0 32px;display:flex;align-items:stretch;min-height:120px}
+.qb-l{flex:1;display:flex;flex-direction:column;justify-content:center;padding:28px 0}
+.qb-l h2{font-size:20px;font-weight:700;color:#fff;margin-bottom:5px}
+.qb-l p{font-size:13px;color:rgba(255,255,255,0.6)}
+.qb-r{display:flex;align-items:center;gap:10px;padding:20px 0 20px 32px;border-left:1px solid rgba(255,255,255,0.1);margin-left:32px}
+.qb-input{padding:11px 16px;border-radius:5px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:#fff;font-size:13px;width:200px}
+.qb-input::placeholder{color:rgba(255,255,255,0.4)}
+
+/* BLOG */
+.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.blog-card{border:1px solid #e5e9f0;border-radius:8px;overflow:hidden;background:#fff}
+.blog-img{height:150px;background-size:cover;background-position:center}
+.bi1{background:url('https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=500&q=70') center/cover}
+.bi2{background:url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=70') center/cover}
+.bi3{background:url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500&q=70') center/cover}
+.blog-body{padding:14px 16px}
+.blog-date{font-size:11px;color:#aaa;margin-bottom:6px}
+.blog-body h4{font-size:13.5px;font-weight:700;color:#1c2e5e;line-height:1.45;margin-bottom:8px}
+.blog-link{font-size:12.5px;color:#e07b00;font-weight:600}
+
+/* CONTACT */
+.contact-wrap{display:grid;grid-template-columns:1fr 1.4fr;gap:40px;align-items:start}
+.contact-info h2{font-size:20px;font-weight:700;color:#1c2e5e;margin-bottom:8px}
+.contact-info p{font-size:13px;color:#666;line-height:1.75;margin-bottom:20px}
+.c-item{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.c-ico{width:38px;height:38px;min-width:38px;background:#1c2e5e;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px}
+.c-item strong{display:block;font-size:13px;font-weight:700;color:#1c2e5e}
+.c-item span{font-size:12.5px;color:#666}
+.contact-form{background:#f5f7fb;border:1px solid #e5e9f0;border-radius:8px;padding:28px}
+.contact-form h3{font-size:16px;font-weight:700;color:#1c2e5e;margin-bottom:18px}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.cf-input{width:100%;padding:11px 14px;border-radius:5px;border:1px solid #dde3ec;background:#fff;font-size:13px;color:#333;font-family:inherit}
+.cf-input:focus{outline:none;border-color:#1c2e5e}
+.cf-ta{width:100%;padding:11px 14px;border-radius:5px;border:1px solid #dde3ec;background:#fff;font-size:13px;color:#333;resize:vertical;min-height:90px;font-family:inherit;margin-bottom:12px}
+.cf-btn{width:100%;background:#e07b00;color:#fff;padding:12px;border-radius:5px;font-size:14px;font-weight:700;border:none;cursor:pointer}
+
+/* FAQ */
+.faq-list{display:flex;flex-direction:column;gap:0;border:1px solid #e5e9f0;border-radius:8px;overflow:hidden}
+.faq-item{border-bottom:1px solid #e5e9f0;background:#fff}
+.faq-item:last-child{border-bottom:none}
+.faq-q{padding:16px 20px;font-size:13.5px;font-weight:700;color:#1c2e5e;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.faq-q::after{content:'+';color:#e07b00;font-size:18px;font-weight:400}
+.faq-a{padding:0 20px 16px;font-size:13px;color:#666;line-height:1.7}
+
+/* FOOTER */
+.footer{background:#0d1a35;padding:48px 32px 18px}
+.fg{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:36px}
+.fl{font-size:19px;font-weight:700;color:#fff;margin-bottom:10px}
+.fl em{color:#e07b00;font-style:normal}
+.fd{font-size:12.5px;color:rgba(255,255,255,.4);line-height:1.75;margin-bottom:14px}
+.fc a{display:flex;align-items:flex-start;gap:8px;color:rgba(255,255,255,.5);font-size:12.5px;margin-bottom:7px}
+.fcol h4{color:rgba(255,255,255,.8);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.08)}
+.fcol a{display:block;color:rgba(255,255,255,.4);font-size:12.5px;margin-bottom:7px}
+.fcol a:hover{color:#e07b00}
+.fb{border-top:1px solid rgba(255,255,255,.07);padding-top:16px;display:flex;justify-content:space-between;align-items:center}
+.fb p{color:rgba(255,255,255,.25);font-size:11.5px}
+.certs{display:flex;gap:6px}
+.cert{border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:3px 9px;color:rgba(255,255,255,.35);font-size:10.5px}
+</style>
+
+<div class="tb">
+  <span>&#128205; Dubai, UAE &nbsp;|&nbsp; Sun–Thu: 08:00 – 17:30 &nbsp;|&nbsp; Supplying GCC &amp; Middle East</span>
+  <div class="tb-r">
+    <a href="#">&#128222; +971 XX XXX XXXX</a>
+    <a href="#">&#9993; info@mestc.com</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="logo">
+    <div class="logo-sq">M</div>
+    <div class="logo-name">MES<em>TC</em></div>
+  </div>
+  <div class="nmenu">
+    <a href="#">Home</a>
+    <a href="#">About Us</a>
+    <a href="#">Products</a>
+    <a href="#">Categories</a>
+    <a href="#">Industries</a>
+    <a href="#">Projects</a>
+    <a href="#">Blog</a>
+    <a href="#">Contact Us</a>
+  </div>
+  <div class="nav-r">
+    <input class="nav-search" placeholder="&#128269; Search products..." />
+    <button class="nav-btn" onclick="sendPrompt('I want to request a quote from MESTC')">REQUEST A QUOTE</button>
+  </div>
+</nav>
+
+<div class="slider" id="sl">
+  <div class="slides" id="sls">
+    <div class="slide s1">
+      <div class="sc">
+        <div class="sc-tag">Industrial Supply — UAE</div>
+        <h1>Reliable Industrial &amp;<br><em>Electrical Solutions</em><br>Across UAE</h1>
+        <p>High-quality electrical, oilfield and industrial products with international standards. Trusted by 100+ clients across the GCC and Middle East.</p>
+        <div class="sc-btns">
+          <button class="btn-w" onclick="sendPrompt('Show me MESTC products')">EXPLORE PRODUCTS</button>
+          <button class="btn-o" onclick="sendPrompt('Request a quote from MESTC')">GET A QUOTE</button>
+        </div>
+      </div>
+    </div>
+    <div class="slide s2">
+      <div class="sc">
+        <div class="sc-tag">Oil &amp; Gas Certified</div>
+        <h1>ATEX &amp; IECEx<br><em>Certified Equipment</em><br>for Oil &amp; Gas</h1>
+        <p>Explosion-proof and hazardous area products for upstream, midstream and downstream oil &amp; gas operations across the GCC.</p>
+        <div class="sc-btns">
+          <button class="btn-w" onclick="sendPrompt('Show MESTC oil and gas products')">VIEW PRODUCTS</button>
+          <button class="btn-o">CONTACT US</button>
+        </div>
+      </div>
+    </div>
+    <div class="slide s3">
+      <div class="sc">
+        <div class="sc-tag">Construction &amp; Marine</div>
+        <h1>Complete Supply<br><em>Solutions for</em><br>Construction &amp; Marine</h1>
+        <p>Tools, safety equipment, electrical supplies and construction materials — all from one trusted source in Dubai.</p>
+        <div class="sc-btns">
+          <button class="btn-w" onclick="sendPrompt('Show MESTC construction products')">VIEW PRODUCTS</button>
+          <button class="btn-o">DOWNLOAD CATALOGUE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="s-prev" id="sp">&#8249;</button>
+  <button class="s-next" id="sn">&#8250;</button>
+  <div class="s-dots">
+    <button class="dot on" onclick="gt(0)"></button>
+    <button class="dot" onclick="gt(1)"></button>
+    <button class="dot" onclick="gt(2)"></button>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-num">10+</div><div class="stat-lbl">Years in UAE</div></div>
+  <div class="stat-item"><div class="stat-num">500+</div><div class="stat-lbl">Products in Stock</div></div>
+  <div class="stat-item"><div class="stat-num">100+</div><div class="stat-lbl">Happy Clients</div></div>
+  <div class="stat-item"><div class="stat-num">50+</div><div class="stat-lbl">Global Brands</div></div>
+  <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-lbl">Technical Support</div></div>
+</div>
+
+<div class="strip">
+  <div class="si"><div class="si-ico">&#10003;</div><div><strong>ATEX / IECEx Certified</strong><span>All products internationally certified</span></div></div>
+  <div class="si"><div class="si-ico">&#128666;</div><div><strong>Fast UAE Delivery</strong><span>Same &amp; next-day dispatch available</span></div></div>
+  <div class="si"><div class="si-ico">&#128172;</div><div><strong>24/7 Technical Support</strong><span>Expert engineers always ready</span></div></div>
+  <div class="si"><div class="si-ico">&#128203;</div><div><strong>Custom RFQ</strong><span>Bulk orders &amp; special specs</span></div></div>
+</div>
+
+<section class="sec sec-alt">
+  <div class="sh">
+    <div class="sh-l">
+      <div class="eye">Browse by Category</div>
+      <h2>Product Categories</h2>
+      <p>Complete industrial &amp; electrical supply for every requirement</p>
+    </div>
+    <div class="sh-r"><a href="#" onclick="sendPrompt('Show all MESTC product categories')">View All Categories &#8594;</a></div>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card"><div class="cat-ico">&#9889;</div><h4>Electrical Equipment</h4><p>22 Products</p></div>
+    <div class="cat-card"><div class="cat-ico">&#128293;</div><h4>Explosion Proof</h4><p>24 Products</p></div>
+    <div class="cat-card"><div class="cat-ico">&#128295;</div><h4>Hand &amp; Power Tools</h4><p>27 Products</p></div>
+    <div class="cat-card"><div class="cat-ico">&#129520;</div><h4>Safety &amp; PPE</h4><p>12 Products</p></div>
+    <div class="cat-card"><div class="cat-ico">&#128268;</div><h4>Wires &amp; Cables</h4><p>16 Products</p></div>
+    <div class="cat-card"><div class="cat-ico">&#128738;</div><h4>Oil &amp; Gas Products</h4><p>45 Products</p></div>
+    <div class="cat-card"><div class="cat-ico">&#127959;</div><h4>Construction Material</h4><p>15 Products</p></div>
+    <div class="cat-card"><div class="cat-ico">&#9881;</div><h4>Industrial Automation</h4><p>18 Products</p></div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="sh">
+    <div class="sh-l">
+      <div class="eye">Featured Products</div>
+      <h2>Explosion Proof Products</h2>
+      <p>Certified for hazardous area use — ATEX &amp; IECEx approved</p>
+    </div>
+    <div class="sh-r"><a href="#" onclick="sendPrompt('Show all MESTC explosion proof products')">View All &#8594;</a></div>
+  </div>
+  <div class="prod-head">
+    <div><h3>Explosion Proof Range</h3><p>ATEX / IECEx Certified — In Stock Dubai</p></div>
+    <a href="#" onclick="sendPrompt('Show all explosion proof products')">View Full Range &#8594;</a>
+  </div>
+  <div class="prod-grid">
+    <div class="prod-card"><div class="prod-img">&#128161;</div><div class="prod-name">Ex Proof Lighting</div><a class="view-btn">View Detail</a></div>
+    <div class="prod-card"><div class="prod-img">&#128268;</div><div class="prod-name">Ex Plug &amp; Socket</div><a class="view-btn">View Detail</a></div>
+    <div class="prod-card"><div class="prod-img">&#128243;</div><div class="prod-name">Control Panels</div><a class="view-btn">View Detail</a></div>
+    <div class="prod-card"><div class="prod-img">&#9889;</div><div class="prod-name">Junction Boxes</div><a class="view-btn">View Detail</a></div>
+    <div class="prod-card"><div class="prod-img">&#128267;</div><div class="prod-name">Ex Proof Motors</div><a class="view-btn">View Detail</a></div>
+    <div class="prod-card"><div class="prod-img">&#128246;</div><div class="prod-name">Ex Proof Alarms</div><a class="view-btn">View Detail</a></div>
+  </div>
+</section>
+
+<section class="sec sec-alt">
+  <div class="sh">
+    <div class="sh-l">
+      <div class="eye">Featured Products</div>
+      <h2>Hand &amp; Power Tools</h2>
+      <p>Professional grade tools from trusted global brands</p>
+    </div>
+    <div class="sh-r"><a href="#" onclick="sendPrompt('Show all MESTC tools')">View All &#8594;</a></div>
+  </div>
+  <div class="prod-head">
+    <div><h3>Tools Range</h3><p>In Stock — Fast Delivery Across UAE</p></div>
+    <a href="#">View Full Range &#8594;</a>
+  </div>
+  <div class="prod-grid">
+    <div class="prod-card"><div class="prod-img">&#128295;</div><div class="prod-name">Insulated Hand Tools</div><a class="view-btn">View Detail</a></div>
+    <div class="prod-card"><div class="prod-img">&#128296;</div><div class="prod-name">Power Drills</div><a class="view-btn">View Detail</a></div>
+    <div class="prod-card"><div class="prod-img">&#128297;</div><div class="prod-name">Ratchet Sets</div><a class="view-btn">View Detail</a></div>
+    <div class="prod-card"><div class="prod-img">&#128293;</div><div class="prod-name">Cutting Tools</div><a class="view-btn">View Detail</a></div>
+    <div class="prod-card"><div class="prod-img">&#129524;</div><div class="prod-name">Torque Wrenches</div><a class="view-btn">View Detail</a></div>
+    <div class="prod-card"><div class="prod-img">&#128736;</div><div class="prod-name">Cable Jointing Kit</div><a class="view-btn">View Detail</a></div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="sh">
+    <div class="sh-l">
+      <div class="eye">About MESTC</div>
+      <h2>Your Trusted Industrial &amp; Electrical Supply Partner</h2>
+    </div>
+  </div>
+  <div class="about-wrap">
+    <div class="about-img">
+      <div class="about-photo"></div>
+      <div class="about-badge"><div class="ab-num">10+</div><div class="ab-lbl">Years in UAE Market</div></div>
+    </div>
+    <div class="about-content">
+      <h2>Welcome to MESTC — Industrial &amp; Electrical Supply Company in UAE</h2>
+      <p>MESTC is a leading wholesaler and trusted partner in the industrial and electrical supply industry. We specialize in the bulk supply of high-quality, durable components and systems for oil &amp; gas, construction, marine, and industrial applications across the UAE and GCC.</p>
+      <p style="font-size:13.5px;color:#555;line-height:1.85;margin-bottom:18px">We are more than just a supplier — we are your dedicated business partner. Our experienced team is committed to providing expert support and seamless service to keep your projects running on time.</p>
+      <ul class="checks">
+        <li><div class="chk">&#10003;</div>ATEX, IECEx, CE and ISO 9001 certified products</li>
+        <li><div class="chk">&#10003;</div>Authorized distributor for 50+ leading global brands</li>
+        <li><div class="chk">&#10003;</div>Fast delivery across UAE, Saudi Arabia, Qatar &amp; Oman</li>
+        <li><div class="chk">&#10003;</div>Dedicated technical support team with field expertise</li>
+        <li><div class="chk">&#10003;</div>Competitive pricing with custom RFQ for bulk orders</li>
+      </ul>
+      <button class="btn-o" onclick="sendPrompt('Tell me more about MESTC')">EXPLORE MORE &#8594;</button>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-alt">
+  <div class="sh">
+    <div class="sh-l">
+      <div class="eye">Industries We Serve</div>
+      <h2>Built for the Most Demanding Sectors</h2>
+      <p>Specialized supply solutions for every major industrial sector in the UAE</p>
+    </div>
+  </div>
+  <div class="ind-grid">
+    <div class="ind-card">
+      <div class="ind-img ip1"><div class="ind-tag">ATEX Certified</div></div>
+      <div class="ind-body"><h3>Oil &amp; Gas</h3><p>Explosion-proof and hazardous area certified equipment for upstream, midstream and downstream operations.</p><a class="ind-link" onclick="sendPrompt('Show MESTC oil and gas products')">View Products &#8594;</a></div>
+    </div>
+    <div class="ind-card">
+      <div class="ind-img ip2"><div class="ind-tag">Site Ready</div></div>
+      <div class="ind-body"><h3>Construction</h3><p>Tools, safety gear, and electrical supplies for large-scale construction projects across the GCC.</p><a class="ind-link" onclick="sendPrompt('Show MESTC construction products')">View Products &#8594;</a></div>
+    </div>
+    <div class="ind-card">
+      <div class="ind-img ip3"><div class="ind-tag">Marine Grade</div></div>
+      <div class="ind-body"><h3>Marine &amp; Offshore</h3><p>Marine-grade wiring, equipment and safety solutions for the harshest offshore environments.</p><a class="ind-link" onclick="sendPrompt('Show MESTC marine products')">View Products &#8594;</a></div>
+    </div>
+  </div>
+</section>
+
+<div class="quote-band">
+  <div class="qb-l">
+    <h2>Make MESTC Your Single Source for Industrial &amp; Electrical Supply.</h2>
+    <p>Get a Quote for Your Project Needs — Our team responds within 24 hours.</p>
+  </div>
+  <div class="qb-r">
+    <input class="qb-input" placeholder="Your email address" />
+    <button class="btn-o" onclick="sendPrompt('I want to get a quote from MESTC')">GET A QUOTE TODAY &#8594;</button>
+  </div>
+</div>
+
+<section class="sec sec-alt">
+  <div class="sh">
+    <div class="sh-l">
+      <div class="eye">Trusted Brands</div>
+      <h2>Brands We Work With</h2>
+      <p>Authorized distributor for globally certified manufacturers</p>
+    </div>
+  </div>
+  <div class="brands-row">
+    <div class="brand-box">EATON</div>
+    <div class="brand-box">SCHNEIDER</div>
+    <div class="brand-box">SIEMENS</div>
+    <div class="brand-box">ABB</div>
+    <div class="brand-box">LEGRAND</div>
+    <div class="brand-box">HONEYWELL</div>
+    <div class="brand-box">3M</div>
+    <div class="brand-box">APPLETON</div>
+    <div class="brand-box">WEIDMULLER</div>
+    <div class="brand-box">KYOWA</div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="sh">
+    <div class="sh-l">
+      <div class="eye">Latest News</div>
+      <h2>From Our Blog</h2>
+    </div>
+    <div class="sh-r"><a href="#">View All Posts &#8594;</a></div>
+  </div>
+  <div class="blog-grid">
+    <div class="blog-card">
+      <div class="blog-img bi1"></div>
+      <div class="blog-body">
+        <div class="blog-date">April 15, 2026</div>
+        <h4>What is ATEX Certification and Why Does It Matter for Oil &amp; Gas Equipment in UAE?</h4>
+        <a class="blog-link">Read More &#8594;</a>
+      </div>
+    </div>
+    <div class="blog-card">
+      <div class="blog-img bi2"></div>
+      <div class="blog-body">
+        <div class="blog-date">March 28, 2026</div>
+        <h4>Top 5 Explosion Proof Lighting Solutions for Hazardous Areas in the GCC</h4>
+        <a class="blog-link">Read More &#8594;</a>
+      </div>
+    </div>
+    <div class="blog-card">
+      <div class="blog-img bi3"></div>
+      <div class="blog-body">
+        <div class="blog-date">March 10, 2026</div>
+        <h4>How to Choose the Right Industrial Tools for Construction Projects in Dubai</h4>
+        <a class="blog-link">Read More &#8594;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-alt">
+  <div class="sh">
+    <div class="sh-l">
+      <div class="eye">Get In Touch</div>
+      <h2>Send Us Your Inquiry</h2>
+      <p>Let us help you find the right products for your project</p>
+    </div>
+  </div>
+  <div class="contact-wrap">
+    <div class="contact-info">
+      <h2>Contact MESTC</h2>
+      <p>Our experts are ready to assist with product selection, bulk pricing, technical specifications and fast delivery across the UAE and GCC.</p>
+      <div class="c-item"><div class="c-ico">&#128222;</div><div><strong>Phone</strong><span>+971 XX XXX XXXX</span></div></div>
+      <div class="c-item"><div class="c-ico">&#9993;</div><div><strong>Email</strong><span>info@mestc.com</span></div></div>
+      <div class="c-item"><div class="c-ico">&#128205;</div><div><strong>Address</strong><span>Dubai, United Arab Emirates</span></div></div>
+      <div class="c-item"><div class="c-ico">&#128337;</div><div><strong>Working Hours</strong><span>Sun–Thu: 08:00 – 17:30 GST</span></div></div>
+    </div>
+    <div class="contact-form">
+      <h3>Request a Quote or Inquiry</h3>
+      <div class="cf-row">
+        <input class="cf-input" placeholder="Full Name *" />
+        <input class="cf-input" placeholder="Email Address *" />
+      </div>
+      <div class="cf-row">
+        <input class="cf-input" placeholder="Phone Number *" />
+        <input class="cf-input" placeholder="Company Name" />
+      </div>
+      <textarea class="cf-ta" placeholder="Tell us what you need — product name, quantity, specifications..."></textarea>
+      <button class="cf-btn" onclick="sendPrompt('Submit a product inquiry to MESTC')">SUBMIT INQUIRY &#8594;</button>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="sh">
+    <div class="sh-l">
+      <div class="eye">FAQs</div>
+      <h2>Frequently Asked Questions</h2>
+    </div>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><div class="faq-q">What does MESTC specialize in?</div><div class="faq-a">MESTC specializes in the wholesale supply of industrial and electrical products including explosion-proof equipment, hand tools, safety PPE, wires &amp; cables, and oilfield supplies for UAE and GCC markets.</div></div>
+    <div class="faq-item"><div class="faq-q">Are your products ATEX and IECEx certified?</div><div class="faq-a">Yes. All hazardous area products we supply are fully certified under ATEX and IECEx international standards, suitable for use in oil &amp; gas, petrochemical and marine environments.</div></div>
+    <div class="faq-item"><div class="faq-q">Do you offer bulk pricing and custom RFQ?</div><div class="faq-a">Absolutely. We offer competitive bulk pricing and custom RFQ for large orders. Submit your requirements and our team will respond within 24 hours with a detailed quotation.</div></div>
+    <div class="faq-item"><div class="faq-q">Which industries do you serve?</div><div class="faq-a">We serve Oil &amp; Gas, Construction, Marine &amp; Offshore, Manufacturing, Energy &amp; Power, and general industrial sectors across the UAE, Saudi Arabia, Qatar, Kuwait and Oman.</div></div>
+    <div class="faq-item"><div class="faq-q">How fast can you deliver within the UAE?</div><div class="faq-a">We maintain local stock in Dubai and offer same-day and next-day delivery across the UAE. GCC deliveries are handled within 3–5 business days depending on location.</div></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="fg">
+    <div>
+      <div class="fl">MES<em>TC</em></div>
+      <div class="fd">Your trusted industrial and electrical supply company in Dubai, UAE. Serving Oil &amp; Gas, Construction, Marine and Industrial sectors across the GCC with internationally certified products since 2009.</div>
+      <div class="fc">
+        <a href="#">&#128222; +971 XX XXX XXXX</a>
+        <a href="#">&#9993; info@mestc.com</a>
+        <a href="#">&#128205; Dubai, United Arab Emirates</a>
+      </div>
+    </div>
+    <div class="fcol">
+      <h4>Products</h4>
+      <a href="#">Explosion Proof</a>
+      <a href="#">Electrical Equipment</a>
+      <a href="#">Hand &amp; Power Tools</a>
+      <a href="#">Safety / PPE</a>
+      <a href="#">Wires &amp; Cables</a>
+      <a href="#">Oil &amp; Gas Products</a>
+    </div>
+    <div class="fcol">
+      <h4>Company</h4>
+      <a href="#">About Us</a>
+      <a href="#">Industries</a>
+      <a href="#">Projects</a>
+      <a href="#">Certifications</a>
+      <a href="#">Blog</a>
+      <a href="#">Contact Us</a>
+    </div>
+    <div class="fcol">
+      <h4>Support</h4>
+      <a href="#">Request a Quote</a>
+      <a href="#">Technical Help</a>
+      <a href="#">Download Catalogue</a>
+      <a href="#">Track Order</a>
+      <a href="#">FAQs</a>
+    </div>
+  </div>
+  <div class="fb">
+    <p>&#169; 2026 MESTC. All rights reserved. Dubai, UAE.</p>
+    <div class="certs">
+      <div class="cert">ATEX</div>
+      <div class="cert">IECEx</div>
+      <div class="cert">ISO 9001</div>
+      <div class="cert">CE Marked</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+let c=0;
+const sls=document.getElementById('sls');
+const dots=document.querySelectorAll('.dot');
+function gt(n){c=n;sls.style.transform='translateX(-'+((100/3)*n)+'%)';dots.forEach((d,i)=>d.classList.toggle('on',i===n))}
+document.getElementById('sp').onclick=()=>gt((c-1+3)%3);
+document.getElementById('sn').onclick=()=>gt((c+1)%3);
+setInterval(()=>gt((c+1)%3),5000);
+</script>
