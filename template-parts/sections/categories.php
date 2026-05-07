@@ -11,16 +11,23 @@ $terms = array();
 if ( taxonomy_exists( 'product_cat' ) ) {
 	$terms = get_terms( array(
 		'taxonomy'   => 'product_cat',
-		'hide_empty' => false,
+		'hide_empty' => true,
 		'parent'     => 0,
 		'number'     => 8,
-		'orderby'    => 'menu_order',
+		'orderby'    => 'count',
+		'order'      => 'DESC',
+		'exclude'    => array( get_option( 'default_product_cat' ) ),
 	) );
 }
 
 if ( is_wp_error( $terms ) ) {
 	$terms = array();
 }
+
+// Skip the catch-all "Uncategorized" term defensively.
+$terms = array_values( array_filter( $terms, function ( $t ) {
+	return $t->slug !== 'uncategorized' && (int) $t->count > 0;
+} ) );
 
 // Fallback to a static list if WooCommerce hasn't been populated yet.
 $fallback = array(

@@ -2,3 +2,4 @@
 .playwrite-mcp-logs
 .playwrite-mcp-logs-archive
 .playwrite-mcp/*
+/.playwright-mcp

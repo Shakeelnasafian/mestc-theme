@@ -58,6 +58,25 @@ $slide_width = 100 / $total;
 	</div>
 	<button class="slider-prev" id="sliderPrev" type="button" aria-label="<?php esc_attr_e( 'Previous slide', 'mestc-theme' ); ?>">&#8249;</button>
 	<button class="slider-next" id="sliderNext" type="button" aria-label="<?php esc_attr_e( 'Next slide', 'mestc-theme' ); ?>">&#8250;</button>
+
+	<aside class="mestc-hero-card" aria-label="<?php esc_attr_e( 'Trust signals', 'mestc-theme' ); ?>">
+		<div class="mestc-hero-card__head">
+			<div class="mestc-hero-card__rating">
+				<span class="stars" aria-hidden="true">★★★★★</span>
+				<strong>4.9 / 5</strong>
+				<small><?php esc_html_e( 'from 100+ B2B clients', 'mestc-theme' ); ?></small>
+			</div>
+		</div>
+		<ul class="mestc-hero-card__list">
+			<li><span class="ico" aria-hidden="true">⏱</span><div><strong><?php esc_html_e( '24-hour quotes', 'mestc-theme' ); ?></strong><span><?php esc_html_e( 'Bulk RFQ turnaround', 'mestc-theme' ); ?></span></div></li>
+			<li><span class="ico" aria-hidden="true">✓</span><div><strong><?php esc_html_e( 'ATEX / IECEx', 'mestc-theme' ); ?></strong><span><?php esc_html_e( 'Internationally certified', 'mestc-theme' ); ?></span></div></li>
+			<li><span class="ico" aria-hidden="true">🚚</span><div><strong><?php esc_html_e( 'GCC delivery', 'mestc-theme' ); ?></strong><span><?php esc_html_e( 'Same / next day UAE', 'mestc-theme' ); ?></span></div></li>
+		</ul>
+		<div class="mestc-hero-card__cta">
+			<a class="btn-orange" href="<?php echo esc_url( mestc_contact_url() ); ?>"><?php esc_html_e( 'Talk to a buyer', 'mestc-theme' ); ?> →</a>
+		</div>
+	</aside>
+
 	<div class="slider-dots" role="tablist">
 		<?php for ( $i = 0; $i < $total; $i++ ) : ?>
 			<button type="button" class="slider-dot<?php echo $i === 0 ? ' active' : ''; ?>" data-slide="<?php echo (int) $i; ?>" role="tab" aria-label="<?php echo esc_attr( sprintf( __( 'Go to slide %d', 'mestc-theme' ), $i + 1 ) ); ?>"<?php echo $i === 0 ? ' aria-selected="true"' : ' aria-selected="false"'; ?>></button>

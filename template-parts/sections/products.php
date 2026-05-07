@@ -50,12 +50,18 @@ if ( class_exists( 'WooCommerce' ) ) {
 	$q = new WP_Query( $args );
 	while ( $q->have_posts() ) {
 		$q->the_post();
+		$pid     = get_the_ID();
+		$cats    = wc_get_product_terms( $pid, 'product_cat', array( 'fields' => 'names' ) );
+		$cat     = is_array( $cats ) && ! is_wp_error( $cats ) && ! empty( $cats ) ? $cats[0] : '';
+		$has_atex = $cat && stripos( $cat, 'explos' ) !== false;
 		$products[] = array(
-			'id'    => get_the_ID(),
-			'title' => get_the_title(),
-			'url'   => get_permalink(),
-			'thumb' => get_the_post_thumbnail_url( get_the_ID(), 'mestc-product-thumb' ),
-			'price' => function_exists( 'wc_get_product' ) ? wc_get_product( get_the_ID() )->get_price_html() : '',
+			'id'      => $pid,
+			'title'   => get_the_title(),
+			'url'     => get_permalink(),
+			'thumb'   => get_the_post_thumbnail_url( $pid, 'mestc-product-thumb' ),
+			'price'   => function_exists( 'wc_get_product' ) ? wc_get_product( $pid )->get_price_html() : '',
+			'cat'     => $cat,
+			'has_atex'=> $has_atex,
 		);
 	}
 	wp_reset_postdata();
@@ -84,29 +90,58 @@ if ( class_exists( 'WooCommerce' ) ) {
 			<div class="prod-grid">
 				<?php if ( ! empty( $products ) ) : ?>
 					<?php foreach ( $products as $p ) : ?>
-						<a class="prod-card" href="<?php echo esc_url( $p['url'] ); ?>">
-							<div class="prod-image">
-								<?php if ( $p['thumb'] ) : ?>
-									<img src="<?php echo esc_url( $p['thumb'] ); ?>" alt="<?php echo esc_attr( $p['title'] ); ?>" loading="lazy" />
-								<?php else : ?>
-									<span aria-hidden="true">📦</span>
-								<?php endif; ?>
+						<article class="prod-card">
+							<a class="prod-card__link" href="<?php echo esc_url( $p['url'] ); ?>" aria-label="<?php echo esc_attr( $p['title'] ); ?>">
+								<div class="prod-card__media">
+									<?php if ( $p['has_atex'] ) : ?>
+										<span class="prod-card__badge">ATEX</span>
+									<?php endif; ?>
+									<?php if ( $p['thumb'] ) : ?>
+										<img src="<?php echo esc_url( $p['thumb'] ); ?>" alt="<?php echo esc_attr( $p['title'] ); ?>" loading="lazy" />
+									<?php else : ?>
+										<span aria-hidden="true" class="prod-card__placeholder">📦</span>
+									<?php endif; ?>
+									<span class="prod-card__overlay" aria-hidden="true">
+										<span class="prod-card__overlay-text"><?php esc_html_e( 'View Product', 'mestc-theme' ); ?> →</span>
+									</span>
+								</div>
+								<div class="prod-card__body">
+									<?php if ( $p['cat'] ) : ?>
+										<div class="prod-card__cat"><?php echo esc_html( $p['cat'] ); ?></div>
+									<?php endif; ?>
+									<h4 class="prod-card__title"><?php echo esc_html( $p['title'] ); ?></h4>
+									<?php if ( $p['price'] ) : ?>
+										<div class="prod-card__price"><?php echo wp_kses_post( $p['price'] ); ?></div>
+									<?php endif; ?>
+								</div>
+							</a>
+							<div class="prod-card__actions">
+								<button type="button" class="prod-card__btn-inquire mestc-inquire-btn"
+									data-product-id="<?php echo (int) $p['id']; ?>"
+									data-product-title="<?php echo esc_attr( $p['title'] ); ?>"
+									data-product-url="<?php echo esc_attr( $p['url'] ); ?>">
+									<span aria-hidden="true">✉</span> <?php esc_html_e( 'Inquire', 'mestc-theme' ); ?>
+								</button>
+								<a class="prod-card__btn-view" href="<?php echo esc_url( $p['url'] ); ?>"><?php esc_html_e( 'Details', 'mestc-theme' ); ?> →</a>
 							</div>
-							<div class="prod-name"><?php echo esc_html( $p['title'] ); ?></div>
-							<?php if ( $p['price'] ) : ?>
-								<div class="prod-price"><?php echo wp_kses_post( $p['price'] ); ?></div>
-							<?php endif; ?>
-							<span class="prod-view"><?php esc_html_e( 'View Detail', 'mestc-theme' ); ?></span>
+						</article>
+					<?php endforeach; ?>
+				<?php elseif ( ! empty( $fallback ) ) : ?>
+					<?php foreach ( $fallback as $f ) : ?>
+						<a class="prod-card prod-card--fallback" href="<?php echo esc_url( $archive_url ); ?>">
+							<div class="prod-card__media">
+								<span aria-hidden="true" class="prod-card__placeholder"><?php echo esc_html( $f['icon'] ?? '📦' ); ?></span>
+							</div>
+							<div class="prod-card__body">
+								<h4 class="prod-card__title"><?php echo esc_html( $f['name'] ); ?></h4>
+							</div>
 						</a>
 					<?php endforeach; ?>
 				<?php else : ?>
-					<?php foreach ( $fallback as $f ) : ?>
-						<a class="prod-card" href="<?php echo esc_url( $archive_url ); ?>">
-							<div class="prod-image"><span aria-hidden="true"><?php echo esc_html( $f['icon'] ?? '📦' ); ?></span></div>
-							<div class="prod-name"><?php echo esc_html( $f['name'] ); ?></div>
-							<span class="prod-view"><?php esc_html_e( 'View Detail', 'mestc-theme' ); ?></span>
-						</a>
-					<?php endforeach; ?>
+					<div class="prod-empty">
+						<p><?php esc_html_e( 'Catalogue update in progress — meanwhile speak to our specialists for stock availability.', 'mestc-theme' ); ?></p>
+						<a class="btn-orange" href="<?php echo esc_url( mestc_contact_url() ); ?>"><?php esc_html_e( 'Send Inquiry', 'mestc-theme' ); ?> →</a>
+					</div>
 				<?php endif; ?>
 			</div>
 		</div>
