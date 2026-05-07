@@ -1992,6 +1992,49 @@ button:focus-visible { outline-offset: 3px; }
 .mestc-finalcta__buttons { display: flex; gap: 12px; flex-wrap: wrap; }
 
 /* ============================================================
+   46. BRANDS MARQUEE
+============================================================ */
+.mestc-brands-marquee {
+	overflow: hidden;
+	position: relative;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-lg);
+	background: #fff;
+	-webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+	mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+}
+.mestc-brands-marquee__track {
+	display: flex;
+	gap: 0;
+	width: max-content;
+	animation: mestcMarquee 40s linear infinite;
+}
+.mestc-brands-marquee:hover .mestc-brands-marquee__track { animation-play-state: paused; }
+.mestc-brands-marquee .brand-item {
+	flex: 0 0 auto;
+	min-width: 180px;
+	border: none;
+	border-right: 1px solid var(--border);
+	border-bottom: none;
+	padding: 26px 28px;
+	background: transparent;
+	transition: background .2s, color .2s, transform .25s;
+}
+.mestc-brands-marquee .brand-item:last-child { border-right: none; }
+.mestc-brands-marquee .brand-item:hover {
+	background: var(--bg-alt);
+	color: var(--blue);
+	transform: scale(1.05);
+}
+@keyframes mestcMarquee {
+	from { transform: translateX(0); }
+	to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+	.mestc-brands-marquee__track { animation: none; }
+}
+
+/* ============================================================
    45. CONTACT PAGE — custom layout
 ============================================================ */
 .mestc-contactpage-hero {

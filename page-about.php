@@ -167,34 +167,10 @@ $contact = mestc_contact_info();
 	</section>
 
 	<!-- ============= Industries we serve ============= -->
-	<section class="section section-alt">
-		<div class="section-inner">
-			<div class="section-header">
-				<div class="section-header-left">
-					<div class="eyebrow"><?php esc_html_e( 'Industries We Serve', 'mestc-theme' ); ?></div>
-					<h2><?php esc_html_e( 'Our customers are operators, contractors and EPCs.', 'mestc-theme' ); ?></h2>
-				</div>
-			</div>
-			<?php
-			set_query_var( 'mestc_alt', false );
-			get_template_part( 'template-parts/sections/industries' );
-			?>
-		</div>
-	</section>
+	<?php get_template_part( 'template-parts/sections/industries' ); ?>
 
 	<!-- ============= Certifications ============= -->
 	<?php get_template_part( 'template-parts/sections/certifications' ); ?>
-
-	<!-- ============= Editor content (when added) ============= -->
-	<?php while ( have_posts() ) : the_post(); ?>
-		<?php $content = get_the_content(); if ( trim( wp_strip_all_tags( $content ) ) !== '' ) : ?>
-			<section class="section mestc-about-extra">
-				<div class="section-inner">
-					<div class="entry-content"><?php the_content(); ?></div>
-				</div>
-			</section>
-		<?php endif; ?>
-	<?php endwhile; ?>
 
 	<!-- ============= Final CTA ============= -->
 	<section class="mestc-finalcta">

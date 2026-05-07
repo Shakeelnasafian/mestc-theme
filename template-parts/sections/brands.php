@@ -30,26 +30,41 @@ $default = array(
 				<p><?php esc_html_e( 'Authorized distributor for globally certified manufacturers', 'mestc-theme' ); ?></p>
 			</div>
 		</div>
-		<div class="brands-grid">
-			<?php if ( $query->have_posts() ) : ?>
-				<?php while ( $query->have_posts() ) :
-					$query->the_post();
-					$thumb = get_the_post_thumbnail_url( get_the_ID(), 'medium' );
-					$url   = get_post_meta( get_the_ID(), '_mestc_brand_url', true );
-					?>
-					<a class="brand-item" href="<?php echo esc_url( $url ?: '#' ); ?>"<?php echo $url ? ' target="_blank" rel="noopener"' : ''; ?>>
-						<?php if ( $thumb ) : ?>
-							<img src="<?php echo esc_url( $thumb ); ?>" alt="<?php echo esc_attr( get_the_title() ); ?>" loading="lazy" />
-						<?php else : ?>
-							<span><?php echo esc_html( get_the_title() ); ?></span>
-						<?php endif; ?>
-					</a>
-				<?php endwhile; wp_reset_postdata(); ?>
-			<?php else : ?>
-				<?php foreach ( $default as $brand ) : ?>
-					<div class="brand-item"><span><?php echo esc_html( $brand ); ?></span></div>
-				<?php endforeach; ?>
-			<?php endif; ?>
+		<div class="mestc-brands-marquee" aria-label="<?php esc_attr_e( 'Authorized distributor brands', 'mestc-theme' ); ?>">
+			<div class="mestc-brands-marquee__track">
+				<?php
+				$render_brand = function ( $title, $thumb = '', $url = '' ) {
+					$tag    = $url ? 'a' : 'div';
+					$attrs  = 'class="brand-item"';
+					if ( $url ) { $attrs .= ' href="' . esc_url( $url ) . '" target="_blank" rel="noopener"'; }
+					echo "<{$tag} {$attrs}>";
+					if ( $thumb ) {
+						printf( '<img src="%s" alt="%s" loading="lazy" />', esc_url( $thumb ), esc_attr( $title ) );
+					} else {
+						printf( '<span>%s</span>', esc_html( $title ) );
+					}
+					echo "</{$tag}>";
+				};
+
+				$render_set = function () use ( $query, $default, $render_brand ) {
+					if ( $query->have_posts() ) {
+						while ( $query->have_posts() ) {
+							$query->the_post();
+							$thumb = get_the_post_thumbnail_url( get_the_ID(), 'medium' );
+							$url   = get_post_meta( get_the_ID(), '_mestc_brand_url', true );
+							$render_brand( get_the_title(), $thumb, $url );
+						}
+						wp_reset_postdata();
+					} else {
+						foreach ( $default as $brand ) {
+							$render_brand( $brand );
+						}
+					}
+				};
+				$render_set();
+				$render_set(); // duplicate for seamless marquee
+				?>
+			</div>
 		</div>
 	</div>
 </section>

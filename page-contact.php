@@ -138,16 +138,6 @@ $flag    = isset( $_GET['mestc_sent'] ) ? sanitize_text_field( wp_unslash( $_GET
 	<!-- ============= FAQ block (compact) ============= -->
 	<?php get_template_part( 'template-parts/sections/faq' ); ?>
 
-	<!-- ============= Editor content (optional) ============= -->
-	<?php while ( have_posts() ) : the_post();
-		$content = get_the_content();
-		if ( trim( wp_strip_all_tags( $content ) ) !== '' ) : ?>
-			<section class="section">
-				<div class="section-inner entry-content"><?php the_content(); ?></div>
-			</section>
-		<?php endif;
-	endwhile; ?>
-
 </main>
 
 <?php get_footer(); ?>
