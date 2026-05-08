@@ -66,6 +66,16 @@ $contact = mestc_contact_info();
 
 			<div class="mestc-inquire-form__footer">
 				<button type="submit" class="mestc-inquire-form__submit btn-orange"><?php esc_html_e( 'Send Inquiry', 'mestc-theme' ); ?> →</button>
+
+				<div class="mestc-inquire-form__or">
+					<span><?php esc_html_e( 'or', 'mestc-theme' ); ?></span>
+				</div>
+
+				<a class="mestc-inquire-form__mailto" href="mailto:<?php echo esc_attr( $contact['email'] ); ?>" data-mestc-mailto>
+					<span aria-hidden="true">📧</span>
+					<?php esc_html_e( 'Open in your email app', 'mestc-theme' ); ?> →
+				</a>
+
 				<a class="mestc-inquire-form__call" href="tel:<?php echo esc_attr( mestc_tel( $contact['phone'] ) ); ?>">
 					<?php esc_html_e( 'Or call', 'mestc-theme' ); ?> <strong><?php echo esc_html( $contact['phone'] ); ?></strong>
 				</a>

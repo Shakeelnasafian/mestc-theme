@@ -29,7 +29,7 @@ get_header();
 	set_query_var( 'mestc_category',    'explosion-proof-products' );
 	set_query_var( 'mestc_block_title', __( 'Explosion Proof Range', 'mestc-theme' ) );
 	set_query_var( 'mestc_block_sub',   __( 'ATEX / IECEx Certified — In Stock Dubai', 'mestc-theme' ) );
-	set_query_var( 'mestc_count',       6 );
+	set_query_var( 'mestc_count',       4 );
 	set_query_var( 'mestc_fallback',    array() );
 	get_template_part( 'template-parts/sections/products' );
 
@@ -41,7 +41,7 @@ get_header();
 	set_query_var( 'mestc_category',    'hand-tools-products' );
 	set_query_var( 'mestc_block_title', __( 'Tools Range', 'mestc-theme' ) );
 	set_query_var( 'mestc_block_sub',   __( 'In Stock — Fast Delivery Across UAE', 'mestc-theme' ) );
-	set_query_var( 'mestc_count',       6 );
+	set_query_var( 'mestc_count',       4 );
 	set_query_var( 'mestc_fallback',    array() );
 	get_template_part( 'template-parts/sections/products' );
 
@@ -53,7 +53,7 @@ get_header();
 	set_query_var( 'mestc_category',    'personal-protective-equipment' );
 	set_query_var( 'mestc_block_title', __( 'Personal Protective Equipment', 'mestc-theme' ) );
 	set_query_var( 'mestc_block_sub',   __( 'Bulk pricing for site supply', 'mestc-theme' ) );
-	set_query_var( 'mestc_count',       6 );
+	set_query_var( 'mestc_count',       4 );
 	set_query_var( 'mestc_fallback',    array() );
 	get_template_part( 'template-parts/sections/products' );
 	?>

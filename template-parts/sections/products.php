@@ -25,7 +25,7 @@ $alt         = (bool) get_query_var( 'mestc_alt' );
 $category    = get_query_var( 'mestc_category' );
 $block_title = get_query_var( 'mestc_block_title' );
 $block_sub   = get_query_var( 'mestc_block_sub' );
-$count       = (int) ( get_query_var( 'mestc_count' ) ?: 6 );
+$count       = (int) ( get_query_var( 'mestc_count' ) ?: 4 );
 $fallback    = (array) get_query_var( 'mestc_fallback' );
 $archive_url = mestc_shop_url();
 
@@ -67,6 +67,15 @@ if ( class_exists( 'WooCommerce' ) ) {
 	wp_reset_postdata();
 }
 ?>
+<?php
+$total_count = 0;
+if ( $category ) {
+	$term_obj = get_term_by( 'slug', $category, 'product_cat' );
+	if ( $term_obj && ! is_wp_error( $term_obj ) ) {
+		$total_count = (int) $term_obj->count;
+	}
+}
+?>
 <section class="section <?php echo $alt ? 'section-alt' : ''; ?> mestc-products-section">
 	<div class="section-inner">
 		<div class="section-header">
@@ -74,19 +83,19 @@ if ( class_exists( 'WooCommerce' ) ) {
 				<?php if ( $eyebrow ) : ?><div class="eyebrow"><?php echo esc_html( $eyebrow ); ?></div><?php endif; ?>
 				<?php if ( $heading ) : ?><h2><?php echo esc_html( $heading ); ?></h2><?php endif; ?>
 				<?php if ( $sub ) : ?><p><?php echo esc_html( $sub ); ?></p><?php endif; ?>
+				<?php if ( $total_count > 0 ) : ?>
+					<div class="mestc-rail-meta">
+						<span class="mestc-rail-meta__pill"><?php echo (int) $total_count; ?> <?php esc_html_e( 'products available', 'mestc-theme' ); ?></span>
+						<?php if ( $block_sub ) : ?>
+							<span class="mestc-rail-meta__sub"><?php echo esc_html( $block_sub ); ?></span>
+						<?php endif; ?>
+					</div>
+				<?php endif; ?>
 			</div>
-			<a class="view-all-link" href="<?php echo esc_url( $archive_url ); ?>"><?php esc_html_e( 'View All', 'mestc-theme' ); ?> →</a>
+			<a class="view-all-link" href="<?php echo esc_url( $archive_url ); ?>"><?php esc_html_e( 'View Full Range', 'mestc-theme' ); ?> →</a>
 		</div>
 
 		<div class="product-block">
-			<div class="product-block-header">
-				<div>
-					<h3><?php echo esc_html( $block_title ?: $heading ); ?></h3>
-					<?php if ( $block_sub ) : ?><p><?php echo esc_html( $block_sub ); ?></p><?php endif; ?>
-				</div>
-				<a href="<?php echo esc_url( $archive_url ); ?>"><?php esc_html_e( 'View Full Range', 'mestc-theme' ); ?> →</a>
-			</div>
-
 			<div class="prod-grid">
 				<?php if ( ! empty( $products ) ) : ?>
 					<?php foreach ( $products as $p ) : ?>
@@ -94,16 +103,13 @@ if ( class_exists( 'WooCommerce' ) ) {
 							<a class="prod-card__link" href="<?php echo esc_url( $p['url'] ); ?>" aria-label="<?php echo esc_attr( $p['title'] ); ?>">
 								<div class="prod-card__media">
 									<?php if ( $p['has_atex'] ) : ?>
-										<span class="prod-card__badge">ATEX</span>
+										<span class="prod-card__badge">ATEX · IECEx</span>
 									<?php endif; ?>
 									<?php if ( $p['thumb'] ) : ?>
 										<img src="<?php echo esc_url( $p['thumb'] ); ?>" alt="<?php echo esc_attr( $p['title'] ); ?>" loading="lazy" />
 									<?php else : ?>
 										<span aria-hidden="true" class="prod-card__placeholder">📦</span>
 									<?php endif; ?>
-									<span class="prod-card__overlay" aria-hidden="true">
-										<span class="prod-card__overlay-text"><?php esc_html_e( 'View Product', 'mestc-theme' ); ?> →</span>
-									</span>
 								</div>
 								<div class="prod-card__body">
 									<?php if ( $p['cat'] ) : ?>
@@ -120,9 +126,8 @@ if ( class_exists( 'WooCommerce' ) ) {
 									data-product-id="<?php echo (int) $p['id']; ?>"
 									data-product-title="<?php echo esc_attr( $p['title'] ); ?>"
 									data-product-url="<?php echo esc_attr( $p['url'] ); ?>">
-									<span aria-hidden="true">✉</span> <?php esc_html_e( 'Inquire', 'mestc-theme' ); ?>
+									<span aria-hidden="true">✉</span> <?php esc_html_e( 'Send Inquiry', 'mestc-theme' ); ?>
 								</button>
-								<a class="prod-card__btn-view" href="<?php echo esc_url( $p['url'] ); ?>"><?php esc_html_e( 'Details', 'mestc-theme' ); ?> →</a>
 							</div>
 						</article>
 					<?php endforeach; ?>

@@ -52,4 +52,8 @@ $cta_url   = mestc_contact_url();
 			<a class="btn-quote" href="<?php echo esc_url( $cta_url ); ?>"><?php echo esc_html( $cta_label ); ?></a>
 		</div>
 	</nav>
+
+	<?php if ( class_exists( 'WooCommerce' ) ) : ?>
+		<?php get_template_part( 'template-parts/header/mega-menu' ); ?>
+	<?php endif; ?>
 </header>

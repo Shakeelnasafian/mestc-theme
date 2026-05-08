@@ -23,6 +23,10 @@ require MESTC_THEME_DIR . 'inc/ajax-search.php';
 require MESTC_THEME_DIR . 'inc/inquire.php';
 require MESTC_THEME_DIR . 'inc/seo.php';
 
+if ( is_admin() ) {
+	require MESTC_THEME_DIR . 'inc/admin-settings.php';
+}
+
 if ( class_exists( 'WooCommerce' ) ) {
 	require MESTC_THEME_DIR . 'inc/woocommerce.php';
 }

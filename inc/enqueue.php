@@ -19,18 +19,29 @@ function mestc_enqueue_assets() {
 
 	wp_enqueue_script( 'mestc-main', MESTC_THEME_URI . 'assets/js/main.js', array(), $ver_main, true );
 
+	$contact_email = get_theme_mod( 'mestc_email', get_option( 'admin_email' ) );
+	if ( ! is_email( $contact_email ) ) {
+		$contact_email = get_option( 'admin_email' );
+	}
+
 	wp_localize_script( 'mestc-main', 'mestcData', array(
 		'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
 		'searchNonce'  => wp_create_nonce( 'mestc_search' ),
 		'contactNonce' => wp_create_nonce( 'mestc_contact' ),
 		'inquireNonce' => wp_create_nonce( 'mestc_inquire' ),
 		'homeUrl'      => home_url( '/' ),
+		'siteName'     => wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ),
+		'contactEmail' => $contact_email,
 		'i18n'         => array(
-			'searching' => esc_html__( 'Searching...', 'mestc-theme' ),
-			'noResults' => esc_html__( 'No products found.', 'mestc-theme' ),
-			'sending'   => esc_html__( 'Sending...', 'mestc-theme' ),
-			'sent'      => esc_html__( 'Thank you. We will respond within 24 hours.', 'mestc-theme' ),
-			'error'     => esc_html__( 'Something went wrong. Please try again.', 'mestc-theme' ),
+			'searching'      => __( 'Searching...', 'mestc-theme' ),
+			'noResults'      => __( 'No products found.', 'mestc-theme' ),
+			'sending'        => __( 'Sending...', 'mestc-theme' ),
+			'sent'           => __( 'Thank you. We will respond within 24 hours.', 'mestc-theme' ),
+			'error'          => __( 'Something went wrong. Please try again.', 'mestc-theme' ),
+			'mailtoSubject'  => __( 'Product Inquiry', 'mestc-theme' ),
+			'mailtoIntro'    => __( 'Hello MESTC team,', 'mestc-theme' ),
+			'mailtoBody'     => __( "I would like to inquire about the following product:", 'mestc-theme' ),
+			'mailtoSignoff'  => __( "Please send bulk pricing, lead time and certifications.\n\nThanks,", 'mestc-theme' ),
 		),
 	) );
 

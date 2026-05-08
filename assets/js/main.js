@@ -15,6 +15,7 @@
 		initInquireModal();
 		initScrollAnimations();
 		initStickyHeader();
+		initMegaMenu();
 	}
 
 	/* ===== Hero slider ===== */
@@ -220,11 +221,14 @@
 		});
 	}
 
-	/* ===== Inquire modal ===== */
+	/* ===== Inquire modal =====
+	 * Clicking an Inquire button now opens the user's email client directly
+	 * with product details pre-filled (no modal). The modal markup stays
+	 * intact for backward compatibility / programmatic use.
+	 */
 	function initInquireModal() {
 		var modal = document.getElementById('mestcInquireModal');
-		if (!modal) return;
-		var form = document.getElementById('mestcInquireForm');
+		var form = modal && document.getElementById('mestcInquireForm');
 		var status = form && form.querySelector('.mestc-inquire-form__status');
 		var triggerEl = null;
 
@@ -232,14 +236,19 @@
 			var trigger = e.target.closest('.mestc-inquire-btn');
 			if (trigger) {
 				e.preventDefault();
-				openModal(trigger);
+				var ptitle = trigger.getAttribute('data-product-title') || '';
+				var purl   = trigger.getAttribute('data-product-url') || '';
+				window.location.href = buildMailto(ptitle, purl);
 				return;
 			}
+			if (!modal) return;
 			var closer = e.target.closest('[data-mestc-close]');
 			if (closer && modal.contains(closer)) {
 				closeModal();
 			}
 		});
+
+		if (!modal) return;
 
 		document.addEventListener('keydown', function (e) {
 			if (e.key === 'Escape' && !modal.hidden) closeModal();
@@ -263,12 +272,44 @@
 			}
 			if (status) { status.className = 'mestc-inquire-form__status'; status.textContent = ''; }
 
+			// Build a mailto: link with the product context so users can use their own email client.
+			var mailto = modal.querySelector('[data-mestc-mailto]');
+			if (mailto) {
+				mailto.href = buildMailto(ptitle, purl);
+			}
+
 			modal.hidden = false;
 			document.body.classList.add('mestc-modal-open');
 			requestAnimationFrame(function () { modal.classList.add('is-open'); });
 
 			var firstField = form.querySelector('input[name="name"]');
 			if (firstField) setTimeout(function () { firstField.focus(); }, 50);
+		}
+
+		function buildMailto(ptitle, purl) {
+			var to       = data.contactEmail || '';
+			var site     = data.siteName || 'MESTC';
+			var i18n     = data.i18n || {};
+			var subject  = (i18n.mailtoSubject || 'Product Inquiry');
+			if (ptitle) { subject += ' — ' + ptitle; }
+
+			var lines = [];
+			lines.push(i18n.mailtoIntro || 'Hello,');
+			lines.push('');
+			lines.push(i18n.mailtoBody || "I'd like to inquire about the following product:");
+			lines.push('');
+			if (ptitle) { lines.push('Product: ' + ptitle); }
+			if (purl)   { lines.push('URL: ' + purl); }
+			lines.push('');
+			lines.push('Quantity: ');
+			lines.push('Delivery location: ');
+			lines.push('Required certifications: ');
+			lines.push('');
+			lines.push(i18n.mailtoSignoff || 'Thanks,');
+
+			return 'mailto:' + encodeURIComponent(to)
+				+ '?subject=' + encodeURIComponent(subject)
+				+ '&body='    + encodeURIComponent(lines.join('\n'));
 		}
 
 		function closeModal() {
@@ -343,6 +384,64 @@
 		setTimeout(function () {
 			els.forEach(function (el) { el.classList.add('is-visible'); });
 		}, 1500);
+	}
+
+	/* ===== Mega menu (Products hover/focus) ===== */
+	function initMegaMenu() {
+		var mega = document.getElementById('mestcMega');
+		if (!mega) return;
+		// Find any nav link that points to the shop / products page.
+		var triggers = [];
+		var menuLinks = document.querySelectorAll('.mestc-menu a');
+		for (var i = 0; i < menuLinks.length; i++) {
+			var href = menuLinks[i].getAttribute('href') || '';
+			var text = (menuLinks[i].textContent || '').trim().toLowerCase();
+			if (text === 'products' || /\/products\/?$|\/shop\/?$/i.test(href)) {
+				triggers.push(menuLinks[i]);
+			}
+		}
+		if (!triggers.length) return;
+
+		var hideTimer;
+		function open() {
+			clearTimeout(hideTimer);
+			mega.classList.add('is-open');
+			mega.setAttribute('aria-hidden', 'false');
+			triggers.forEach(function (t) { t.setAttribute('aria-expanded', 'true'); });
+		}
+		function close() {
+			mega.classList.remove('is-open');
+			mega.setAttribute('aria-hidden', 'true');
+			triggers.forEach(function (t) { t.setAttribute('aria-expanded', 'false'); });
+		}
+		function scheduleClose() {
+			clearTimeout(hideTimer);
+			hideTimer = setTimeout(close, 180);
+		}
+
+		triggers.forEach(function (t) {
+			t.setAttribute('aria-haspopup', 'true');
+			t.setAttribute('aria-expanded', 'false');
+			// Hide any WP-generated sub-menu — the mega panel replaces it.
+			var li = t.parentElement;
+			if (li) {
+				var sub = li.querySelector('.sub-menu');
+				if (sub) sub.style.display = 'none';
+				li.classList.add('has-mega');
+			}
+			t.addEventListener('mouseenter', open);
+			t.addEventListener('mouseleave', scheduleClose);
+			t.addEventListener('focus', open);
+			t.addEventListener('blur', scheduleClose);
+		});
+		mega.addEventListener('mouseenter', open);
+		mega.addEventListener('mouseleave', scheduleClose);
+		mega.addEventListener('focusin', open);
+		mega.addEventListener('focusout', scheduleClose);
+
+		document.addEventListener('keydown', function (e) {
+			if (e.key === 'Escape' && mega.classList.contains('is-open')) close();
+		});
 	}
 
 	/* ===== Sticky header polish ===== */

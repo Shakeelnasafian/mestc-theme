@@ -15,7 +15,7 @@ $certs   = array_filter( array_map( 'trim', explode( ',', get_theme_mod( 'mestc_
 	<div class="mestc-footer-inner">
 		<div class="footer-grid">
 			<div class="footer-col footer-col--brand">
-				<div class="footer-logo"><?php mestc_logo(); ?></div>
+				<div class="footer-logo"><?php mestc_logo( true ); ?></div>
 				<?php if ( $about ) : ?>
 					<p class="footer-desc"><?php echo wp_kses_post( $about ); ?></p>
 				<?php endif; ?>

@@ -65,9 +65,13 @@ function mestc_shop_url() {
 /**
  * Render the brand logo. Uploaded custom logos take precedence; otherwise the
  * styled MESTC wordmark renders regardless of site-title casing.
+ *
+ * @param bool $force_wordmark Skip the uploaded image and always render the
+ *                             wordmark. Used in dark contexts (footer) where
+ *                             the navy logo would disappear.
  */
-function mestc_logo() {
-	if ( has_custom_logo() ) {
+function mestc_logo( $force_wordmark = false ) {
+	if ( ! $force_wordmark && has_custom_logo() ) {
 		the_custom_logo();
 		return;
 	}
