@@ -7,6 +7,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+if ( ! mestc_section_visible( 'trust' ) ) { return; }
+
 $items = array(
 	array( 'icon' => '✓', 'title' => __( 'ATEX / IECEx Certified',  'mestc-theme' ), 'sub' => __( 'All products internationally certified', 'mestc-theme' ) ),
 	array( 'icon' => '🚚','title' => __( 'Fast UAE Delivery',       'mestc-theme' ), 'sub' => __( 'Same & next-day dispatch available',     'mestc-theme' ) ),

@@ -16,6 +16,7 @@
 		initScrollAnimations();
 		initStickyHeader();
 		initMegaMenu();
+		initRfq();
 	}
 
 	/* ===== Hero slider ===== */
@@ -456,6 +457,266 @@
 		}
 		window.addEventListener('scroll', onScroll, { passive: true });
 		onScroll();
+	}
+
+	/* ===== Bulk RFQ basket =====
+	 * Stores accumulated products in localStorage, renders a drawer with line
+	 * items + customer form, and submits the whole thing as one inquiry.
+	 */
+	var RFQ_KEY = 'mestc_rfq_v1';
+
+	function rfqRead() {
+		try {
+			var raw = localStorage.getItem(RFQ_KEY);
+			var arr = raw ? JSON.parse(raw) : [];
+			return Array.isArray(arr) ? arr : [];
+		} catch (e) { return []; }
+	}
+	function rfqWrite(arr) {
+		try { localStorage.setItem(RFQ_KEY, JSON.stringify(arr)); } catch (e) {}
+		rfqRefresh();
+	}
+	function rfqAdd(item) {
+		if (!item || !item.id) return;
+		var arr = rfqRead();
+		var existing = arr.find(function (x) { return String(x.id) === String(item.id); });
+		if (existing) {
+			existing.qty = (existing.qty || 1) + 1;
+		} else {
+			arr.push({
+				id: String(item.id),
+				title: item.title || '',
+				url: item.url || '',
+				thumb: item.thumb || '',
+				qty: 1
+			});
+		}
+		rfqWrite(arr);
+	}
+	function rfqRemove(id) {
+		rfqWrite(rfqRead().filter(function (x) { return String(x.id) !== String(id); }));
+	}
+	function rfqUpdateQty(id, qty) {
+		var arr = rfqRead();
+		var line = arr.find(function (x) { return String(x.id) === String(id); });
+		if (!line) return;
+		line.qty = Math.max(1, parseInt(qty, 10) || 1);
+		rfqWrite(arr);
+	}
+	function rfqClear() { rfqWrite([]); }
+
+	function initRfq() {
+		var drawer = document.getElementById('mestcRfq');
+		var fab    = document.getElementById('mestcRfqFab');
+		if (!drawer && !fab) return;
+
+		// Open / close
+		document.addEventListener('click', function (e) {
+			var openTrigger = e.target.closest('[data-mestc-rfq-open]');
+			if (openTrigger) {
+				e.preventDefault();
+				rfqOpen();
+				return;
+			}
+			var closeTrigger = e.target.closest('[data-mestc-rfq-close]');
+			if (closeTrigger && drawer && drawer.contains(closeTrigger)) {
+				rfqClose();
+				return;
+			}
+			// Add-to-RFQ button anywhere on the page
+			var addTrigger = e.target.closest('.mestc-add-rfq');
+			if (addTrigger) {
+				e.preventDefault();
+				rfqAdd({
+					id:    addTrigger.getAttribute('data-product-id'),
+					title: addTrigger.getAttribute('data-product-title'),
+					url:   addTrigger.getAttribute('data-product-url'),
+					thumb: addTrigger.getAttribute('data-product-thumb')
+				});
+				rfqOpen();
+				rfqFlashAdded(addTrigger);
+				return;
+			}
+			// Remove a single line
+			var removeTrigger = e.target.closest('[data-mestc-rfq-remove]');
+			if (removeTrigger) {
+				rfqRemove(removeTrigger.getAttribute('data-mestc-rfq-remove'));
+				return;
+			}
+		});
+
+		// Qty changes inside the drawer
+		if (drawer) {
+			drawer.addEventListener('input', function (e) {
+				if (e.target.matches('[data-mestc-rfq-qty]')) {
+					rfqUpdateQty(e.target.getAttribute('data-mestc-rfq-qty'), e.target.value);
+				}
+			});
+		}
+
+		// Form submit
+		var form = document.getElementById('mestcRfqForm');
+		if (form && data.ajaxUrl) {
+			form.addEventListener('submit', function (e) {
+				e.preventDefault();
+				rfqSubmit(form);
+			});
+		}
+
+		// Esc closes
+		document.addEventListener('keydown', function (e) {
+			if (e.key === 'Escape' && drawer && !drawer.hidden) rfqClose();
+		});
+
+		// Initial paint
+		rfqRefresh();
+	}
+
+	function rfqRefresh() {
+		var lines = rfqRead();
+		var drawer = document.getElementById('mestcRfq');
+		var fab    = document.getElementById('mestcRfqFab');
+		var totalQty = lines.reduce(function (n, l) { return n + (parseInt(l.qty, 10) || 1); }, 0);
+
+		// Counters everywhere
+		var counts = document.querySelectorAll('[data-mestc-rfq-count]');
+		for (var i = 0; i < counts.length; i++) { counts[i].textContent = lines.length; }
+
+		// Header pill: hide when empty unless on shop pages.
+		var pills = document.querySelectorAll('.mestc-rfq-pill');
+		for (var p = 0; p < pills.length; p++) {
+			pills[p].classList.toggle('has-items', lines.length > 0);
+		}
+
+		// Floating FAB visibility
+		if (fab) {
+			fab.hidden = lines.length === 0;
+		}
+
+		if (!drawer) return;
+
+		var listEl  = drawer.querySelector('[data-mestc-rfq-lines]');
+		var emptyEl = drawer.querySelector('[data-mestc-rfq-empty]');
+		var formEl  = drawer.querySelector('[data-mestc-rfq-form]');
+		var mailto  = drawer.querySelector('[data-mestc-rfq-mailto]');
+
+		if (lines.length === 0) {
+			if (listEl)  listEl.hidden  = true;
+			if (formEl)  formEl.hidden  = true;
+			if (emptyEl) emptyEl.hidden = false;
+		} else {
+			if (emptyEl) emptyEl.hidden = true;
+			if (listEl)  { listEl.hidden = false; listEl.innerHTML = lines.map(rfqLineHtml).join(''); }
+			if (formEl)  formEl.hidden = false;
+			if (mailto && data.contactEmail) {
+				mailto.href = rfqBuildMailto(lines);
+			}
+		}
+	}
+
+	function rfqLineHtml(line) {
+		var thumb = line.thumb
+			? '<img src="' + escAttr(line.thumb) + '" alt="" loading="lazy" />'
+			: '<span class="mestc-rfq__ph" aria-hidden="true">📦</span>';
+		return ''
+			+ '<li class="mestc-rfq__line" data-id="' + escAttr(line.id) + '">'
+			+ '<div class="mestc-rfq__line-thumb">' + thumb + '</div>'
+			+ '<div class="mestc-rfq__line-body">'
+			+   '<a class="mestc-rfq__line-title" href="' + escAttr(line.url) + '">' + escHtml(line.title) + '</a>'
+			+   '<div class="mestc-rfq__line-actions">'
+			+     '<label class="mestc-rfq__qty">'
+			+       '<span>Qty</span>'
+			+       '<input type="number" min="1" value="' + (parseInt(line.qty, 10) || 1) + '" data-mestc-rfq-qty="' + escAttr(line.id) + '" />'
+			+     '</label>'
+			+     '<button type="button" class="mestc-rfq__remove" data-mestc-rfq-remove="' + escAttr(line.id) + '" aria-label="Remove">×</button>'
+			+   '</div>'
+			+ '</div>'
+			+ '</li>';
+	}
+
+	function rfqBuildMailto(lines) {
+		var to = data.contactEmail || '';
+		var subject = 'Bulk RFQ — ' + lines.length + ' items';
+		var bodyParts = ['Hello MESTC team,', '', 'I would like to inquire about the following ' + lines.length + ' product(s):', ''];
+		lines.forEach(function (l, i) {
+			bodyParts.push((i + 1) + '. ' + l.title);
+			bodyParts.push('   Quantity: ' + (l.qty || 1));
+			bodyParts.push('   URL: ' + l.url);
+			bodyParts.push('');
+		});
+		bodyParts.push('Please send pricing, lead times and stock availability.');
+		bodyParts.push('');
+		bodyParts.push('Thanks,');
+		return 'mailto:' + encodeURIComponent(to)
+			+ '?subject=' + encodeURIComponent(subject)
+			+ '&body='    + encodeURIComponent(bodyParts.join('\n'));
+	}
+
+	function rfqOpen() {
+		var d = document.getElementById('mestcRfq');
+		if (!d) return;
+		d.hidden = false;
+		document.body.classList.add('mestc-rfq-open');
+		requestAnimationFrame(function () { d.classList.add('is-open'); });
+		d.setAttribute('aria-hidden', 'false');
+	}
+	function rfqClose() {
+		var d = document.getElementById('mestcRfq');
+		if (!d) return;
+		d.classList.remove('is-open');
+		document.body.classList.remove('mestc-rfq-open');
+		setTimeout(function () { d.hidden = true; d.setAttribute('aria-hidden', 'true'); }, 250);
+	}
+	function rfqFlashAdded(btn) {
+		btn.classList.add('is-added');
+		var orig = btn.getAttribute('data-original-label');
+		if (!orig) {
+			btn.setAttribute('data-original-label', btn.textContent.trim());
+		}
+		btn.innerHTML = '<span aria-hidden="true">✓</span> Added';
+		setTimeout(function () {
+			btn.classList.remove('is-added');
+			var label = btn.getAttribute('data-original-label');
+			if (label) btn.textContent = label;
+		}, 1400);
+	}
+
+	function rfqSubmit(form) {
+		var lines = rfqRead();
+		var status = form.querySelector('.mestc-rfq__status');
+		var submit = form.querySelector('.mestc-rfq__submit');
+		if (!lines.length) {
+			if (status) { status.textContent = 'Your inquiry list is empty.'; status.className = 'mestc-rfq__status is-err'; }
+			return;
+		}
+		if (submit) { submit.disabled = true; submit.dataset.original = submit.dataset.original || submit.textContent; submit.textContent = 'Sending…'; }
+		if (status) { status.textContent = ''; status.className = 'mestc-rfq__status'; }
+
+		var fd = new FormData(form);
+		fd.set('action', 'mestc_rfq_submit');
+		fd.set('nonce', data.inquireNonce);
+		fd.set('lines', JSON.stringify(lines.map(function (l) {
+			return { id: l.id, qty: parseInt(l.qty, 10) || 1, note: l.note || '' };
+		})));
+
+		fetch(data.ajaxUrl, { method: 'POST', body: fd, credentials: 'same-origin' })
+			.then(function (r) { return r.json(); })
+			.then(function (res) {
+				var ok = res && res.success;
+				var msg = (res && res.data && res.data.message) || (ok ? 'Sent.' : 'Error.');
+				if (status) { status.textContent = msg; status.className = 'mestc-rfq__status ' + (ok ? 'is-ok' : 'is-err'); }
+				if (ok) {
+					rfqClear();
+					form.reset();
+					setTimeout(rfqClose, 1800);
+				}
+			})
+			.catch(function () {
+				if (status) { status.textContent = 'Network error. Please try again.'; status.className = 'mestc-rfq__status is-err'; }
+			})
+			.finally(function () {
+				if (submit) { submit.disabled = false; submit.textContent = submit.dataset.original; }
+			});
 	}
 
 	/* ===== Helpers ===== */

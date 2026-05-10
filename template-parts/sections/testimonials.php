@@ -7,6 +7,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+if ( ! mestc_section_visible( 'testimonials' ) ) { return; }
+
 $items = array(
 	array(
 		'quote' => __( '"MESTC ships exactly what we spec. Three years of project deliveries and not one return for non-conformity. The team understands hazardous-area certification."', 'mestc-theme' ),

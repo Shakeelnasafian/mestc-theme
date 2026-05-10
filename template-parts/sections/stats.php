@@ -7,6 +7,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+if ( ! mestc_section_visible( 'stats' ) ) { return; }
+
 $defaults = mestc_default_stats();
 $icons = array( '🏆', '📦', '🤝', '🌐', '⚡' );
 ?>

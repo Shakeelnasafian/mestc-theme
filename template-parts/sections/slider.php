@@ -7,7 +7,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-if ( ! get_theme_mod( 'mestc_show_hero', 1 ) ) { return; }
+if ( ! mestc_section_visible( 'hero' ) ) { return; }
 
 $default_images = array(
 	1 => 'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=1600&q=80',

@@ -89,6 +89,16 @@ function mestc_handle_admin_settings_save() {
 		}
 	}
 
+	// Visibility checkboxes — submitted only when ticked, so iterate the registry.
+	if ( function_exists( 'mestc_visibility_registry' ) ) {
+		foreach ( mestc_visibility_registry() as $id => $args ) {
+			$key = 'mestc_show_' . $id;
+			$on  = isset( $_POST[ $key ] ) && $_POST[ $key ] === '1';
+			set_theme_mod( $key, $on ? 1 : 0 );
+			$updated++;
+		}
+	}
+
 	add_settings_error( 'mestc_settings', 'mestc_saved', sprintf( __( '%d settings saved.', 'mestc-theme' ), $updated ), 'success' );
 }
 add_action( 'load-toplevel_page_mestc-settings', 'mestc_handle_admin_settings_save' );
@@ -116,7 +126,7 @@ function mestc_render_admin_settings() {
 		<form method="post" action="">
 			<?php wp_nonce_field( 'mestc_settings_save', 'mestc_settings_nonce' ); ?>
 
-			<?php foreach ( $schema as $section_id => $section ) : ?>
+			<?php foreach ( $schema as $section ) : ?>
 				<div class="mestc-admin-card" style="background:#fff;border:1px solid #c3c4c7;border-radius:6px;padding:20px 24px;margin-bottom:18px;box-shadow:0 1px 1px rgba(0,0,0,.04)">
 					<h2 style="margin-top:0;font-size:16px;color:#1d2f5a"><?php echo esc_html( $section['title'] ); ?></h2>
 					<?php if ( ! empty( $section['desc'] ) ) : ?>
@@ -153,6 +163,68 @@ function mestc_render_admin_settings() {
 					</table>
 				</div>
 			<?php endforeach; ?>
+
+			<?php if ( function_exists( 'mestc_visibility_registry' ) ) : ?>
+				<div class="mestc-admin-card" style="background:#fff;border:1px solid #c3c4c7;border-radius:6px;padding:20px 24px;margin-bottom:18px;box-shadow:0 1px 1px rgba(0,0,0,.04)">
+					<h2 style="margin-top:0;font-size:16px;color:#1d2f5a;display:flex;align-items:center;gap:8px">
+						<span class="dashicons dashicons-visibility" style="color:#b08842"></span>
+						<?php esc_html_e( 'Section Visibility', 'mestc-theme' ); ?>
+					</h2>
+					<p style="color:#646970;margin-bottom:18px">
+						<?php esc_html_e( 'Tick a box to show that section, untick to hide it. Changes apply across the entire site.', 'mestc-theme' ); ?>
+					</p>
+
+					<?php
+					$registry = mestc_visibility_registry();
+					$groups   = mestc_visibility_groups();
+					foreach ( $groups as $group_id => $group_label ) :
+						?>
+						<details open style="margin-bottom:14px;border:1px solid #dcdcde;border-radius:5px;padding:10px 14px;background:#f6f7f7">
+							<summary style="cursor:pointer;font-weight:700;color:#1d2f5a;padding:4px 0">
+								<?php echo esc_html( $group_label ); ?>
+							</summary>
+							<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:6px 24px;margin-top:10px;padding:6px 4px">
+								<?php foreach ( $registry as $id => $args ) :
+									if ( $args['group'] !== $group_id ) { continue; }
+									$key     = 'mestc_show_' . $id;
+									$checked = (int) get_theme_mod( $key, $args['default'] );
+									?>
+									<label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;padding:4px 0">
+										<input type="checkbox" name="<?php echo esc_attr( $key ); ?>" value="1" <?php checked( $checked, 1 ); ?> style="margin-top:3px" />
+										<span style="font-size:13px;color:#1d2327;line-height:1.4"><?php echo esc_html( $args['label'] ); ?></span>
+									</label>
+								<?php endforeach; ?>
+							</div>
+						</details>
+					<?php endforeach; ?>
+				</div>
+
+				<div class="mestc-admin-card" style="background:#fbf6ec;border:1px solid #e7d6b3;border-radius:6px;padding:16px 22px;margin-bottom:18px">
+					<h3 style="margin-top:0;font-size:14px;color:#1d2f5a">
+						<?php esc_html_e( 'Other admin areas you can use', 'mestc-theme' ); ?>
+					</h3>
+					<ul style="list-style:disc;padding-left:18px;color:#646970;font-size:13px;line-height:1.7;margin:6px 0 0">
+						<li>
+							<strong><?php esc_html_e( 'Menus:', 'mestc-theme' ); ?></strong>
+							<a href="<?php echo esc_url( admin_url( 'nav-menus.php' ) ); ?>"><?php esc_html_e( 'Appearance → Menus', 'mestc-theme' ); ?></a>
+							— <?php esc_html_e( 'add / remove links, drag to reorder, build sub-menus.', 'mestc-theme' ); ?>
+						</li>
+						<li>
+							<strong><?php esc_html_e( 'Hero slides + about images + footer copy:', 'mestc-theme' ); ?></strong>
+							<a href="<?php echo esc_url( admin_url( 'customize.php?autofocus[panel]=mestc_panel' ) ); ?>"><?php esc_html_e( 'Customize → MESTC Theme', 'mestc-theme' ); ?></a>
+							— <?php esc_html_e( 'edit slide titles, upload images, change about copy with live preview.', 'mestc-theme' ); ?>
+						</li>
+						<li>
+							<strong><?php esc_html_e( 'Industries / Brands / FAQs / Inquiries:', 'mestc-theme' ); ?></strong>
+							<?php esc_html_e( 'use the matching menu item in the WP-admin sidebar — each is its own custom post type.', 'mestc-theme' ); ?>
+						</li>
+						<li>
+							<strong><?php esc_html_e( 'Site logo:', 'mestc-theme' ); ?></strong>
+							<a href="<?php echo esc_url( admin_url( 'customize.php?autofocus[control]=custom_logo' ) ); ?>"><?php esc_html_e( 'Customize → Site Identity', 'mestc-theme' ); ?></a>.
+						</li>
+					</ul>
+				</div>
+			<?php endif; ?>
 
 			<?php submit_button( __( 'Save Changes', 'mestc-theme' ) ); ?>
 		</form>

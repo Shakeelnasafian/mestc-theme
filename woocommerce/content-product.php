@@ -55,12 +55,29 @@ $onsale  = $product->is_on_sale();
 				<span class="mestc-card-price"><?php echo wp_kses_post( $price ); ?></span>
 			<?php endif;
 		endif; ?>
-		<button type="button" class="mestc-inquire-btn mestc-inquire-loop"
-			data-product-id="<?php echo (int) $id; ?>"
-			data-product-title="<?php echo esc_attr( $title ); ?>"
-			data-product-url="<?php echo esc_attr( $url ); ?>">
-			<span aria-hidden="true">✉</span> <?php esc_html_e( 'Inquire', 'mestc-theme' ); ?>
-		</button>
+		<?php
+		$thumb_url = '';
+		if ( has_post_thumbnail( $id ) ) {
+			$thumb_url = get_the_post_thumbnail_url( $id, 'mestc-product-thumb' );
+		}
+		?>
+		<div class="mestc-card-actions__group">
+			<button type="button" class="mestc-card-actions__primary mestc-add-rfq"
+				data-product-id="<?php echo (int) $id; ?>"
+				data-product-title="<?php echo esc_attr( $title ); ?>"
+				data-product-url="<?php echo esc_attr( $url ); ?>"
+				data-product-thumb="<?php echo esc_attr( $thumb_url ); ?>">
+				<span aria-hidden="true">+</span> <?php esc_html_e( 'Add to RFQ', 'mestc-theme' ); ?>
+			</button>
+			<button type="button" class="mestc-card-actions__email mestc-inquire-btn"
+				data-product-id="<?php echo (int) $id; ?>"
+				data-product-title="<?php echo esc_attr( $title ); ?>"
+				data-product-url="<?php echo esc_attr( $url ); ?>"
+				aria-label="<?php esc_attr_e( 'Email inquiry directly', 'mestc-theme' ); ?>"
+				title="<?php esc_attr_e( 'Email inquiry directly', 'mestc-theme' ); ?>">
+				<span aria-hidden="true">✉</span>
+			</button>
+		</div>
 		<a class="mestc-card-view" href="<?php echo esc_url( $url ); ?>"><?php esc_html_e( 'View Details', 'mestc-theme' ); ?> →</a>
 	</div>
 </li>

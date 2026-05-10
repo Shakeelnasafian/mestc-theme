@@ -7,6 +7,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+if ( ! mestc_section_visible( 'blog' ) ) { return; }
+
 $query = new WP_Query( array(
 	'post_type'      => 'post',
 	'post_status'    => 'publish',

@@ -18,6 +18,9 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+$rail_id = get_query_var( 'mestc_rail_id' );
+if ( $rail_id && ! mestc_section_visible( $rail_id ) ) { return; }
+
 $eyebrow     = get_query_var( 'mestc_eyebrow' );
 $heading     = get_query_var( 'mestc_heading' );
 $sub         = get_query_var( 'mestc_sub' );
@@ -122,11 +125,20 @@ if ( $category ) {
 								</div>
 							</a>
 							<div class="prod-card__actions">
-								<button type="button" class="prod-card__btn-inquire mestc-inquire-btn"
+								<button type="button" class="prod-card__btn-inquire mestc-add-rfq"
 									data-product-id="<?php echo (int) $p['id']; ?>"
 									data-product-title="<?php echo esc_attr( $p['title'] ); ?>"
-									data-product-url="<?php echo esc_attr( $p['url'] ); ?>">
-									<span aria-hidden="true">✉</span> <?php esc_html_e( 'Send Inquiry', 'mestc-theme' ); ?>
+									data-product-url="<?php echo esc_attr( $p['url'] ); ?>"
+									data-product-thumb="<?php echo esc_attr( $p['thumb'] ); ?>">
+									<span aria-hidden="true">+</span> <?php esc_html_e( 'Add to RFQ', 'mestc-theme' ); ?>
+								</button>
+								<button type="button" class="prod-card__btn-email mestc-inquire-btn"
+									data-product-id="<?php echo (int) $p['id']; ?>"
+									data-product-title="<?php echo esc_attr( $p['title'] ); ?>"
+									data-product-url="<?php echo esc_attr( $p['url'] ); ?>"
+									aria-label="<?php esc_attr_e( 'Email inquiry directly', 'mestc-theme' ); ?>"
+									title="<?php esc_attr_e( 'Email inquiry directly', 'mestc-theme' ); ?>">
+									<span aria-hidden="true">✉</span>
 								</button>
 							</div>
 						</article>

@@ -48,18 +48,21 @@ if ( mestc_is_catalog_mode() ) {
 function mestc_loop_inquire_button() {
 	global $product;
 	if ( ! $product ) { return; }
+	$thumb = get_the_post_thumbnail_url( $product->get_id(), 'mestc-product-thumb' );
 	printf(
-		'<button type="button" class="mestc-inquire-btn mestc-inquire-loop" data-product-id="%1$d" data-product-title="%2$s" data-product-url="%3$s">%4$s</button>',
+		'<button type="button" class="mestc-inquire-btn mestc-add-rfq" data-product-id="%1$d" data-product-title="%2$s" data-product-url="%3$s" data-product-thumb="%5$s">+ %4$s</button>',
 		(int) $product->get_id(),
 		esc_attr( $product->get_name() ),
 		esc_attr( get_permalink( $product->get_id() ) ),
-		esc_html__( 'Inquire Now', 'mestc-theme' )
+		esc_html__( 'Add to RFQ', 'mestc-theme' ),
+		esc_attr( $thumb )
 	);
 }
 
 function mestc_single_inquire_button() {
 	global $product;
 	if ( ! $product ) { return; }
+	$thumb = get_the_post_thumbnail_url( $product->get_id(), 'mestc-product-thumb' );
 	?>
 	<div class="mestc-product-trust-row" aria-label="<?php esc_attr_e( 'Why buy from MESTC', 'mestc-theme' ); ?>">
 		<div>
@@ -79,17 +82,42 @@ function mestc_single_inquire_button() {
 		</div>
 	</div>
 	<div class="mestc-inquire-cta">
-		<button type="button" class="mestc-inquire-btn mestc-inquire-single"
-			data-product-id="<?php echo (int) $product->get_id(); ?>"
-			data-product-title="<?php echo esc_attr( $product->get_name() ); ?>"
-			data-product-url="<?php echo esc_attr( get_permalink( $product->get_id() ) ); ?>">
-			<span class="mestc-inquire-ico" aria-hidden="true">✉</span>
-			<?php esc_html_e( 'Send Inquiry / Get Quote', 'mestc-theme' ); ?>
-		</button>
+		<div class="mestc-inquire-cta__head">
+			<span class="mestc-inquire-cta__eyebrow"><?php esc_html_e( 'Two ways to inquire', 'mestc-theme' ); ?></span>
+			<h3><?php esc_html_e( 'Get pricing in 24 hours', 'mestc-theme' ); ?></h3>
+		</div>
+
+		<div class="mestc-inquire-cta__buttons">
+			<button type="button" class="mestc-inquire-cta__primary mestc-add-rfq"
+				data-product-id="<?php echo (int) $product->get_id(); ?>"
+				data-product-title="<?php echo esc_attr( $product->get_name() ); ?>"
+				data-product-url="<?php echo esc_attr( get_permalink( $product->get_id() ) ); ?>"
+				data-product-thumb="<?php echo esc_attr( $thumb ); ?>">
+				<span class="ico" aria-hidden="true">+</span>
+				<span class="label">
+					<strong><?php esc_html_e( 'Add to RFQ', 'mestc-theme' ); ?></strong>
+					<small><?php esc_html_e( 'Build a multi-item inquiry', 'mestc-theme' ); ?></small>
+				</span>
+			</button>
+
+			<button type="button" class="mestc-inquire-cta__secondary mestc-inquire-btn"
+				data-product-id="<?php echo (int) $product->get_id(); ?>"
+				data-product-title="<?php echo esc_attr( $product->get_name() ); ?>"
+				data-product-url="<?php echo esc_attr( get_permalink( $product->get_id() ) ); ?>">
+				<span class="ico" aria-hidden="true">✉</span>
+				<span class="label">
+					<strong><?php esc_html_e( 'Email Inquiry', 'mestc-theme' ); ?></strong>
+					<small><?php esc_html_e( 'Open in your email app', 'mestc-theme' ); ?></small>
+				</span>
+			</button>
+		</div>
+
 		<a class="mestc-inquire-tel" href="tel:<?php echo esc_attr( mestc_tel( get_theme_mod( 'mestc_phone' ) ) ); ?>">
 			<span aria-hidden="true">📞</span>
-			<?php echo esc_html( get_theme_mod( 'mestc_phone', '+971 XX XXX XXXX' ) ); ?>
+			<?php esc_html_e( 'Or call', 'mestc-theme' ); ?>
+			<strong><?php echo esc_html( get_theme_mod( 'mestc_phone', '+971 XX XXX XXXX' ) ); ?></strong>
 		</a>
+
 		<ul class="mestc-inquire-perks">
 			<li><span aria-hidden="true">✓</span> <?php esc_html_e( '24-hour response guaranteed', 'mestc-theme' ); ?></li>
 			<li><span aria-hidden="true">✓</span> <?php esc_html_e( 'Bulk pricing & custom RFQ', 'mestc-theme' ); ?></li>

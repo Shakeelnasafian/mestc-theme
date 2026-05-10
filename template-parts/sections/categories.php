@@ -7,6 +7,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+if ( ! mestc_section_visible( 'categories' ) ) { return; }
+
 $terms = array();
 if ( taxonomy_exists( 'product_cat' ) ) {
 	$terms = get_terms( array(

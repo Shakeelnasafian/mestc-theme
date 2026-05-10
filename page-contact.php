@@ -13,6 +13,7 @@ $contact = mestc_contact_info();
 $flag    = isset( $_GET['mestc_sent'] ) ? sanitize_text_field( wp_unslash( $_GET['mestc_sent'] ) ) : '';
 ?>
 
+<?php if ( mestc_section_visible( 'contact_hero' ) ) : ?>
 <section class="mestc-contactpage-hero">
 	<div class="mestc-contactpage-hero__inner">
 		<span class="eyebrow eyebrow--light"><?php esc_html_e( 'Contact MESTC', 'mestc-theme' ); ?></span>
@@ -20,10 +21,12 @@ $flag    = isset( $_GET['mestc_sent'] ) ? sanitize_text_field( wp_unslash( $_GET
 		<p><?php esc_html_e( 'Spec sheets, bulk RFQs, technical questions, delivery to remote sites — pick the channel that suits you.', 'mestc-theme' ); ?></p>
 	</div>
 </section>
+<?php endif; ?>
 
 <main id="primary" class="site-main mestc-contactpage">
 
 	<!-- ============= Quick action tiles ============= -->
+	<?php if ( mestc_section_visible( 'contact_tiles' ) ) : ?>
 	<section class="section">
 		<div class="section-inner">
 			<div class="mestc-contact-tiles">
@@ -54,8 +57,10 @@ $flag    = isset( $_GET['mestc_sent'] ) ? sanitize_text_field( wp_unslash( $_GET
 			</div>
 		</div>
 	</section>
+	<?php endif; ?>
 
 	<!-- ============= Form + Info ============= -->
+	<?php if ( mestc_section_visible( 'contact_form_block' ) ) : ?>
 	<section class="section section-alt" id="mestcContactBlock">
 		<div class="section-inner">
 			<div class="mestc-contactpage__grid">
@@ -87,6 +92,7 @@ $flag    = isset( $_GET['mestc_sent'] ) ? sanitize_text_field( wp_unslash( $_GET
 						</li>
 					</ul>
 
+					<?php if ( mestc_section_visible( 'contact_map' ) ) : ?>
 					<div class="mestc-contactpage__map">
 						<iframe
 							src="https://www.openstreetmap.org/export/embed.html?bbox=55.0,25.0,55.5,25.4&amp;layer=mapnik"
@@ -96,6 +102,7 @@ $flag    = isset( $_GET['mestc_sent'] ) ? sanitize_text_field( wp_unslash( $_GET
 							style="border:0;border-radius:8px"
 							title="<?php esc_attr_e( 'MESTC location map', 'mestc-theme' ); ?>"></iframe>
 					</div>
+					<?php endif; ?>
 				</div>
 
 				<form class="contact-form mestc-contactpage__form" id="mestcContactForm" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
@@ -134,6 +141,7 @@ $flag    = isset( $_GET['mestc_sent'] ) ? sanitize_text_field( wp_unslash( $_GET
 			</div>
 		</div>
 	</section>
+	<?php endif; ?>
 
 	<!-- ============= FAQ block (compact) ============= -->
 	<?php get_template_part( 'template-parts/sections/faq' ); ?>
