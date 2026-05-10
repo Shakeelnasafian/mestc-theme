@@ -7,6 +7,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+if ( ! mestc_section_visible( 'contact_form' ) ) { return; }
+
 $contact = mestc_contact_info();
 $flag    = isset( $_GET['mestc_sent'] ) ? sanitize_text_field( wp_unslash( $_GET['mestc_sent'] ) ) : '';
 ?>

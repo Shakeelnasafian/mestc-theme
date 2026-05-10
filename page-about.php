@@ -12,6 +12,7 @@ get_header();
 $contact = mestc_contact_info();
 ?>
 
+<?php if ( mestc_section_visible( 'about_hero' ) ) : ?>
 <section class="mestc-aboutpage-hero">
 	<div class="mestc-aboutpage-hero__inner">
 		<div class="mestc-aboutpage-hero__text">
@@ -31,10 +32,12 @@ $contact = mestc_contact_info();
 		</div>
 	</div>
 </section>
+<?php endif; ?>
 
 <main id="primary" class="site-main mestc-aboutpage">
 
 	<!-- ============= Story 2-col ============= -->
+	<?php if ( mestc_section_visible( 'about_story' ) ) : ?>
 	<section class="section mestc-about-story">
 		<div class="section-inner">
 			<div class="section-header">
@@ -90,8 +93,10 @@ $contact = mestc_contact_info();
 			</div>
 		</div>
 	</section>
+	<?php endif; ?>
 
 	<!-- ============= Mission / Vision / Values ============= -->
+	<?php if ( mestc_section_visible( 'about_mvv' ) ) : ?>
 	<section class="section section-alt mestc-mvv">
 		<div class="section-inner">
 			<div class="section-header">
@@ -119,8 +124,10 @@ $contact = mestc_contact_info();
 			</div>
 		</div>
 	</section>
+	<?php endif; ?>
 
 	<!-- ============= Capabilities timeline strip ============= -->
+	<?php if ( mestc_section_visible( 'about_capabilities' ) ) : ?>
 	<section class="section mestc-capabilities">
 		<div class="section-inner">
 			<div class="section-header">
@@ -165,6 +172,7 @@ $contact = mestc_contact_info();
 			</div>
 		</div>
 	</section>
+	<?php endif; ?>
 
 	<!-- ============= Industries we serve ============= -->
 	<?php get_template_part( 'template-parts/sections/industries' ); ?>
@@ -173,6 +181,7 @@ $contact = mestc_contact_info();
 	<?php get_template_part( 'template-parts/sections/certifications' ); ?>
 
 	<!-- ============= Final CTA ============= -->
+	<?php if ( mestc_section_visible( 'about_final_cta' ) ) : ?>
 	<section class="mestc-finalcta">
 		<div class="section-inner mestc-finalcta__inner">
 			<div>
@@ -185,6 +194,7 @@ $contact = mestc_contact_info();
 			</div>
 		</div>
 	</section>
+	<?php endif; ?>
 
 </main>
 

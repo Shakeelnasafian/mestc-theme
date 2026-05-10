@@ -7,6 +7,13 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+// Either the front-page or the contact-page can hide this block.
+if ( function_exists( 'is_page' ) && is_page( 'contact' ) ) {
+	if ( ! mestc_section_visible( 'contact_faq' ) ) { return; }
+} else {
+	if ( ! mestc_section_visible( 'faq' ) ) { return; }
+}
+
 $query = new WP_Query( array(
 	'post_type'      => 'mestc_faq',
 	'post_status'    => 'publish',

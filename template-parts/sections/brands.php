@@ -7,6 +7,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+if ( ! mestc_section_visible( 'brands' ) ) { return; }
+
 $query = new WP_Query( array(
 	'post_type'      => 'mestc_brand',
 	'post_status'    => 'publish',

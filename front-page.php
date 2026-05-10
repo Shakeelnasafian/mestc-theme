@@ -22,6 +22,7 @@ get_header();
 
 	<?php
 	// Featured Products — Block 1: Explosion Proof
+	set_query_var( 'mestc_rail_id',     'products_rail_1' );
 	set_query_var( 'mestc_eyebrow',     __( 'Featured Products', 'mestc-theme' ) );
 	set_query_var( 'mestc_heading',     __( 'Explosion Proof Products', 'mestc-theme' ) );
 	set_query_var( 'mestc_sub',         __( 'Certified for hazardous area use — ATEX & IECEx approved', 'mestc-theme' ) );
@@ -34,6 +35,7 @@ get_header();
 	get_template_part( 'template-parts/sections/products' );
 
 	// Featured Products — Block 2: Tools
+	set_query_var( 'mestc_rail_id',     'products_rail_2' );
 	set_query_var( 'mestc_eyebrow',     __( 'Featured Products', 'mestc-theme' ) );
 	set_query_var( 'mestc_heading',     __( 'Hand & Power Tools', 'mestc-theme' ) );
 	set_query_var( 'mestc_sub',         __( 'Professional grade tools from trusted global brands', 'mestc-theme' ) );
@@ -46,6 +48,7 @@ get_header();
 	get_template_part( 'template-parts/sections/products' );
 
 	// Featured Products — Block 3: PPE / Safety
+	set_query_var( 'mestc_rail_id',     'products_rail_3' );
 	set_query_var( 'mestc_eyebrow',     __( 'Featured Products', 'mestc-theme' ) );
 	set_query_var( 'mestc_heading',     __( 'Safety &amp; PPE', 'mestc-theme' ) );
 	set_query_var( 'mestc_sub',         __( 'Industrial-grade head-to-toe protection', 'mestc-theme' ) );

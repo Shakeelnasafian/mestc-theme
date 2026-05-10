@@ -7,6 +7,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+if ( ! mestc_section_visible( 'certifications' ) && ! mestc_section_visible( 'about_certifications' ) ) { return; }
+
 $items = array(
 	array( 'name' => 'ATEX',    'sub' => 'Hazardous Areas' ),
 	array( 'name' => 'IECEx',   'sub' => 'International' ),

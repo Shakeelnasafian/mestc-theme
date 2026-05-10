@@ -7,6 +7,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+if ( ! mestc_section_visible( 'why_mestc' ) ) { return; }
+
 $cards = array(
 	array(
 		'ico'   => '📄',

@@ -7,7 +7,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-if ( ! get_theme_mod( 'mestc_show_topbar', 1 ) ) {
+if ( ! mestc_section_visible( 'topbar' ) ) {
 	return;
 }
 

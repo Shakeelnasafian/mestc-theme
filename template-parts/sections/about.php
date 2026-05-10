@@ -7,6 +7,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+if ( ! mestc_section_visible( 'about' ) ) { return; }
+
 $default_body   = "MESTC is a leading wholesaler and trusted partner in the industrial and electrical supply industry. We specialize in the bulk supply of high-quality, durable components and systems for oil & gas, construction, marine, and industrial applications across the UAE and GCC.\n\nWe are more than just a supplier — we are your dedicated business partner. Our experienced team is committed to providing expert support and seamless service to keep your projects running on time.";
 $default_checks = "ATEX, IECEx, CE and ISO 9001 certified products\nAuthorized distributor for 50+ leading global brands\nFast delivery across UAE, Saudi Arabia, Qatar & Oman\nDedicated technical support team with field expertise\nCompetitive pricing with custom RFQ for bulk orders";
 

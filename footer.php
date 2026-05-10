@@ -14,6 +14,7 @@ $certs   = array_filter( array_map( 'trim', explode( ',', get_theme_mod( 'mestc_
 <footer class="mestc-footer" role="contentinfo">
 	<div class="mestc-footer-inner">
 		<div class="footer-grid">
+			<?php if ( mestc_section_visible( 'footer_about' ) ) : ?>
 			<div class="footer-col footer-col--brand">
 				<div class="footer-logo"><?php mestc_logo( true ); ?></div>
 				<?php if ( $about ) : ?>
@@ -31,6 +32,7 @@ $certs   = array_filter( array_map( 'trim', explode( ',', get_theme_mod( 'mestc_
 					</a>
 				</div>
 
+				<?php if ( mestc_section_visible( 'footer_newsletter' ) ) : ?>
 				<div class="mestc-newsletter">
 					<h5><?php esc_html_e( 'Stay in the loop', 'mestc-theme' ); ?></h5>
 					<p><?php esc_html_e( 'Catalogue updates, certification news and bulk-order specials — straight to your inbox.', 'mestc-theme' ); ?></p>
@@ -46,14 +48,18 @@ $certs   = array_filter( array_map( 'trim', explode( ',', get_theme_mod( 'mestc_
 						<button type="submit"><?php esc_html_e( 'Subscribe', 'mestc-theme' ); ?></button>
 					</form>
 				</div>
+				<?php endif; ?>
 
+				<?php if ( mestc_section_visible( 'footer_social' ) ) : ?>
 				<div class="mestc-social" aria-label="<?php esc_attr_e( 'Social profiles', 'mestc-theme' ); ?>">
 					<a href="#" aria-label="LinkedIn"><span aria-hidden="true">in</span></a>
 					<a href="#" aria-label="Facebook"><span aria-hidden="true">f</span></a>
 					<a href="#" aria-label="Instagram"><span aria-hidden="true">◎</span></a>
 					<a href="#" aria-label="WhatsApp"><span aria-hidden="true">✆</span></a>
 				</div>
+				<?php endif; ?>
 			</div>
+			<?php endif; ?>
 
 			<?php
 			$columns = array(
@@ -114,7 +120,7 @@ $certs   = array_filter( array_map( 'trim', explode( ',', get_theme_mod( 'mestc_
 
 		<div class="footer-bottom">
 			<p><?php mestc_footer_copyright(); ?></p>
-			<?php if ( ! empty( $certs ) ) : ?>
+			<?php if ( ! empty( $certs ) && mestc_section_visible( 'footer_certs' ) ) : ?>
 				<div class="footer-certs" aria-label="<?php esc_attr_e( 'Certifications', 'mestc-theme' ); ?>">
 					<?php foreach ( $certs as $cert ) : ?>
 						<span class="cert-badge"><?php echo esc_html( $cert ); ?></span>
@@ -126,6 +132,7 @@ $certs   = array_filter( array_map( 'trim', explode( ',', get_theme_mod( 'mestc_
 </footer>
 
 <?php get_template_part( 'template-parts/inquire-modal' ); ?>
+<?php get_template_part( 'template-parts/rfq-drawer' ); ?>
 
 <?php wp_footer(); ?>
 </body>

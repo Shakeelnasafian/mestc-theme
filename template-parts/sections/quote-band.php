@@ -7,6 +7,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+if ( ! mestc_section_visible( 'quote_band' ) ) { return; }
+
 $title = get_theme_mod( 'mestc_quote_band_title', 'Make MESTC Your Single Source for Industrial & Electrical Supply.' );
 $text  = get_theme_mod( 'mestc_quote_band_text',  'Get a Quote for Your Project Needs — Our team responds within 24 hours.' );
 ?>

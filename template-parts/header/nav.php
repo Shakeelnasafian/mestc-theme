@@ -36,6 +36,7 @@ $cta_url   = mestc_contact_url();
 		</div>
 
 		<div class="nav-right">
+			<?php if ( mestc_section_visible( 'nav_search' ) ) : ?>
 			<form role="search" method="get" class="nav-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 				<label class="screen-reader-text" for="mestc-search"><?php esc_html_e( 'Search', 'mestc-theme' ); ?></label>
 				<input id="mestc-search" class="nav-search" type="search" name="s" autocomplete="off" placeholder="<?php esc_attr_e( 'Search products...', 'mestc-theme' ); ?>" />
@@ -44,16 +45,27 @@ $cta_url   = mestc_contact_url();
 				<?php endif; ?>
 				<div class="mestc-search-results" id="mestcSearchResults" role="listbox" aria-live="polite"></div>
 			</form>
+			<?php endif; ?>
 
 			<?php if ( class_exists( 'WooCommerce' ) ) : ?>
 				<?php mestc_render_mini_cart_button(); ?>
 			<?php endif; ?>
 
+			<?php if ( mestc_section_visible( 'nav_rfq_pill' ) ) : ?>
+			<button type="button" class="mestc-rfq-pill" data-mestc-rfq-open aria-label="<?php esc_attr_e( 'Open inquiry list', 'mestc-theme' ); ?>">
+				<span class="mestc-rfq-pill__ico" aria-hidden="true">📋</span>
+				<span class="mestc-rfq-pill__text"><?php esc_html_e( 'RFQ', 'mestc-theme' ); ?></span>
+				<span class="mestc-rfq-pill__count" data-mestc-rfq-count>0</span>
+			</button>
+			<?php endif; ?>
+
+			<?php if ( mestc_section_visible( 'nav_quote_button' ) ) : ?>
 			<a class="btn-quote" href="<?php echo esc_url( $cta_url ); ?>"><?php echo esc_html( $cta_label ); ?></a>
+			<?php endif; ?>
 		</div>
 	</nav>
 
-	<?php if ( class_exists( 'WooCommerce' ) ) : ?>
+	<?php if ( class_exists( 'WooCommerce' ) && mestc_section_visible( 'mega_menu' ) ) : ?>
 		<?php get_template_part( 'template-parts/header/mega-menu' ); ?>
 	<?php endif; ?>
 </header>

@@ -7,6 +7,13 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+// Either page can hide the industries block independently.
+if ( is_page_template( 'page-about.php' ) || ( function_exists( 'is_page' ) && is_page( 'about' ) ) ) {
+	if ( ! mestc_section_visible( 'about_industries' ) ) { return; }
+} else {
+	if ( ! mestc_section_visible( 'industries' ) ) { return; }
+}
+
 $query = new WP_Query( array(
 	'post_type'      => 'mestc_industry',
 	'post_status'    => 'publish',

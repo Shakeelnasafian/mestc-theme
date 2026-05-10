@@ -16,11 +16,13 @@ require MESTC_THEME_DIR . 'inc/enqueue.php';
 require MESTC_THEME_DIR . 'inc/menus.php';
 require MESTC_THEME_DIR . 'inc/widgets.php';
 require MESTC_THEME_DIR . 'inc/customizer.php';
+require MESTC_THEME_DIR . 'inc/visibility.php';
 require MESTC_THEME_DIR . 'inc/post-types.php';
 require MESTC_THEME_DIR . 'inc/template-functions.php';
 require MESTC_THEME_DIR . 'inc/contact-form.php';
 require MESTC_THEME_DIR . 'inc/ajax-search.php';
 require MESTC_THEME_DIR . 'inc/inquire.php';
+require MESTC_THEME_DIR . 'inc/rfq.php';
 require MESTC_THEME_DIR . 'inc/seo.php';
 
 if ( is_admin() ) {
