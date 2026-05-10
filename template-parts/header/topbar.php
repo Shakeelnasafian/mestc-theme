@@ -32,11 +32,6 @@ $message = get_theme_mod( 'mestc_topbar_message', 'Supplying GCC & Middle East' 
 			<a class="topbar-email" href="mailto:<?php echo esc_attr( $contact['email'] ); ?>">
 				<span aria-hidden="true">✉️</span> <?php echo esc_html( $contact['email'] ); ?>
 			</a>
-			<?php if ( class_exists( 'WooCommerce' ) ) : ?>
-				<a class="topbar-account" href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>">
-					<span aria-hidden="true">👤</span> <?php esc_html_e( 'My Account', 'mestc-theme' ); ?>
-				</a>
-			<?php endif; ?>
 		</div>
 	</div>
 </div>
