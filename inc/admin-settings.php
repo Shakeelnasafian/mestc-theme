@@ -45,7 +45,29 @@ function mestc_admin_settings_fields() {
 				'mestc_footer_certs' => array( 'label' => __( 'Certification Badges', 'mestc-theme' ), 'type' => 'text', 'default' => 'ATEX,IECEx,ISO 9001,CE Marked', 'sanitize' => 'sanitize_text_field', 'desc' => __( 'Comma-separated list shown bottom-right of the footer.', 'mestc-theme' ) ),
 			),
 		),
+		'forms'    => array(
+			'title'  => __( 'Forms — FluentForm Integration', 'mestc-theme' ),
+			'desc'   => __( 'Drop in a FluentForm shortcode to replace the built-in contact form on the homepage Contact section and the dedicated Contact Us page. Leave empty to use the default theme form.', 'mestc-theme' ),
+			'fields' => array(
+				'mestc_fluentform_contact'  => array(
+					'label'    => __( 'Contact form shortcode', 'mestc-theme' ),
+					'type'     => 'text',
+					'default'  => '',
+					'sanitize' => 'mestc_sanitize_shortcode',
+					'desc'     => __( 'Example: [fluentform id="3"] — find the shortcode under WP-admin → Fluent Forms → All Forms → Shortcode column.', 'mestc-theme' ),
+				),
+			),
+		),
 	);
+}
+
+/**
+ * Allow shortcodes (with square brackets) through but block actual HTML.
+ */
+function mestc_sanitize_shortcode( $value ) {
+	$value = wp_strip_all_tags( (string) $value );
+	$value = trim( $value );
+	return $value;
 }
 
 /**

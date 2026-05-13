@@ -167,6 +167,28 @@ function mestc_breadcrumbs() {
 }
 
 /**
+ * Render the configured FluentForm contact shortcode, or return false if none.
+ * Falls back to the built-in form when no shortcode is configured.
+ *
+ * @return bool true when a FluentForm shortcode was rendered, false otherwise.
+ */
+function mestc_render_fluentform_contact() {
+	$shortcode = trim( (string) get_theme_mod( 'mestc_fluentform_contact', '' ) );
+	if ( $shortcode === '' ) {
+		return false;
+	}
+	// Defensive: only proceed when FluentForm is active.
+	if ( ! shortcode_exists( 'fluentform' ) ) {
+		echo '<div class="form-message form-message--err">' . esc_html__( 'FluentForm plugin is not active — falling back to the default form.', 'mestc-theme' ) . '</div>';
+		return false;
+	}
+	echo '<div class="mestc-fluentform-wrap">';
+	echo do_shortcode( $shortcode );
+	echo '</div>';
+	return true;
+}
+
+/**
  * Convert customizer multi-line text to an array.
  */
 function mestc_lines_to_array( $value ) {
