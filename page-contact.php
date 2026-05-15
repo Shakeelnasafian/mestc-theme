@@ -105,39 +105,43 @@ $flag    = isset( $_GET['mestc_sent'] ) ? sanitize_text_field( wp_unslash( $_GET
 					<?php endif; ?>
 				</div>
 
-				<form class="contact-form mestc-contactpage__form" id="mestcContactForm" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<div class="contact-form mestc-contactpage__form">
 					<h3><?php esc_html_e( 'Request a Quote or Inquiry', 'mestc-theme' ); ?></h3>
 					<p class="mestc-contactpage__form-lede"><?php esc_html_e( '* Required fields. We never share your details.', 'mestc-theme' ); ?></p>
 
-					<?php if ( $flag === '1' ) : ?>
-						<div class="form-message form-message--ok"><?php esc_html_e( 'Thank you. We will respond within 24 hours.', 'mestc-theme' ); ?></div>
-					<?php elseif ( $flag === '0' ) : ?>
-						<div class="form-message form-message--err"><?php esc_html_e( 'Sorry, something went wrong. Please try again or call us directly.', 'mestc-theme' ); ?></div>
+					<?php if ( ! mestc_render_fluentform_contact() ) : ?>
+						<form id="mestcContactForm" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+							<?php if ( $flag === '1' ) : ?>
+								<div class="form-message form-message--ok"><?php esc_html_e( 'Thank you. We will respond within 24 hours.', 'mestc-theme' ); ?></div>
+							<?php elseif ( $flag === '0' ) : ?>
+								<div class="form-message form-message--err"><?php esc_html_e( 'Sorry, something went wrong. Please try again or call us directly.', 'mestc-theme' ); ?></div>
+							<?php endif; ?>
+
+							<input type="hidden" name="action" value="mestc_contact" />
+							<?php wp_nonce_field( 'mestc_contact', 'mestc_contact_nonce' ); ?>
+							<div class="mestc-hp" aria-hidden="true" style="position:absolute;left:-9999px;height:0;overflow:hidden">
+								<label>Leave this field empty <input type="text" name="mestc_hp" tabindex="-1" autocomplete="off" /></label>
+							</div>
+
+							<div class="form-row">
+								<input class="form-input" type="text"  name="name"    required placeholder="<?php esc_attr_e( 'Full Name *',    'mestc-theme' ); ?>" />
+								<input class="form-input" type="email" name="email"   required placeholder="<?php esc_attr_e( 'Email Address *','mestc-theme' ); ?>" />
+							</div>
+							<div class="form-row">
+								<input class="form-input" type="tel"  name="phone"   required placeholder="<?php esc_attr_e( 'Phone Number *', 'mestc-theme' ); ?>" />
+								<input class="form-input" type="text" name="company"          placeholder="<?php esc_attr_e( 'Company Name',  'mestc-theme' ); ?>" />
+							</div>
+							<textarea class="form-textarea" name="message" rows="5" placeholder="<?php esc_attr_e( 'Tell us what you need — product name, quantity, certifications, delivery location...', 'mestc-theme' ); ?>"></textarea>
+							<button class="form-submit" type="submit"><?php esc_html_e( 'Send Inquiry', 'mestc-theme' ); ?> →</button>
+							<div class="form-message form-message--inline" aria-live="polite"></div>
+						</form>
 					<?php endif; ?>
-
-					<input type="hidden" name="action" value="mestc_contact" />
-					<?php wp_nonce_field( 'mestc_contact', 'mestc_contact_nonce' ); ?>
-					<div class="mestc-hp" aria-hidden="true" style="position:absolute;left:-9999px;height:0;overflow:hidden">
-						<label>Leave this field empty <input type="text" name="mestc_hp" tabindex="-1" autocomplete="off" /></label>
-					</div>
-
-					<div class="form-row">
-						<input class="form-input" type="text"  name="name"    required placeholder="<?php esc_attr_e( 'Full Name *',    'mestc-theme' ); ?>" />
-						<input class="form-input" type="email" name="email"   required placeholder="<?php esc_attr_e( 'Email Address *','mestc-theme' ); ?>" />
-					</div>
-					<div class="form-row">
-						<input class="form-input" type="tel"  name="phone"   required placeholder="<?php esc_attr_e( 'Phone Number *', 'mestc-theme' ); ?>" />
-						<input class="form-input" type="text" name="company"          placeholder="<?php esc_attr_e( 'Company Name',  'mestc-theme' ); ?>" />
-					</div>
-					<textarea class="form-textarea" name="message" rows="5" placeholder="<?php esc_attr_e( 'Tell us what you need — product name, quantity, certifications, delivery location...', 'mestc-theme' ); ?>"></textarea>
-					<button class="form-submit" type="submit"><?php esc_html_e( 'Send Inquiry', 'mestc-theme' ); ?> →</button>
-					<div class="form-message form-message--inline" aria-live="polite"></div>
 
 					<div class="mestc-contactpage__assure">
 						<span aria-hidden="true">🔒</span>
 						<?php esc_html_e( 'Your details are kept confidential and used only to reply to your inquiry.', 'mestc-theme' ); ?>
 					</div>
-				</form>
+				</div>
 			</div>
 		</div>
 	</section>
